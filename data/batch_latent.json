@@ -1,0 +1,1747 @@
+{
+  "seed": 20260251,
+  "latent": [
+    {
+      "record_id": "rec_0000",
+      "base_logodds": -0.08025315118729522,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.9366100940539898,
+      "income_regularity": 0.7176285969894013
+    },
+    {
+      "record_id": "rec_0001",
+      "base_logodds": -0.8650273723417209,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.8698441160426202,
+      "income_regularity": 0.41712609632724024
+    },
+    {
+      "record_id": "rec_0002",
+      "base_logodds": -1.2039179643846267,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.2857761265644616,
+      "income_regularity": 0.4502259695523627
+    },
+    {
+      "record_id": "rec_0003",
+      "base_logodds": 0.14724283158073936,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.9982603926757818,
+      "income_regularity": 0.9506162567071536
+    },
+    {
+      "record_id": "rec_0004",
+      "base_logodds": 0.5996904741411491,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.20016902362793276,
+      "income_regularity": 0.14510934860728417
+    },
+    {
+      "record_id": "rec_0005",
+      "base_logodds": -1.1915490034241858,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.9366100940539898,
+      "income_regularity": 0.7176285969894013
+    },
+    {
+      "record_id": "rec_0006",
+      "base_logodds": -1.463129921598491,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.9366100940539898,
+      "income_regularity": 0.7176285969894013
+    },
+    {
+      "record_id": "rec_0007",
+      "base_logodds": -1.1926369022712835,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.9366100940539898,
+      "income_regularity": 0.7176285969894013
+    },
+    {
+      "record_id": "rec_0008",
+      "base_logodds": 0.7378027084628638,
+      "is_truly_dead": false,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.4235352833405338,
+      "income_regularity": 0.4772182583748097
+    },
+    {
+      "record_id": "rec_0009",
+      "base_logodds": -0.4120538953122972,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.2857761265644616,
+      "income_regularity": 0.4502259695523627
+    },
+    {
+      "record_id": "rec_0010",
+      "base_logodds": -1.0725795503011897,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.004080059718720759,
+      "income_regularity": 0.42259871184908654
+    },
+    {
+      "record_id": "rec_0011",
+      "base_logodds": -0.8308166482002537,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.17320806465748828,
+      "income_regularity": 0.44265225021129395
+    },
+    {
+      "record_id": "rec_0012",
+      "base_logodds": 0.6381162618316926,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.6654256478464319,
+      "income_regularity": 0.3862750385294522
+    },
+    {
+      "record_id": "rec_0013",
+      "base_logodds": -0.6406683153655381,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.9366100940539898,
+      "income_regularity": 0.7176285969894013
+    },
+    {
+      "record_id": "rec_0014",
+      "base_logodds": 0.10266662546532264,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    {
+      "record_id": "rec_0015",
+      "base_logodds": 0.749610168477297,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.3026636578540228,
+      "income_regularity": 0.2942070136141868
+    },
+    {
+      "record_id": "rec_0016",
+      "base_logodds": -0.9393890652718196,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.7105394611791646,
+      "income_regularity": 0.8235207772068796
+    },
+    {
+      "record_id": "rec_0017",
+      "base_logodds": 0.733855125269457,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.9366100940539898,
+      "income_regularity": 0.7176285969894013
+    },
+    {
+      "record_id": "rec_0018",
+      "base_logodds": 1.5100133128389706,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.2785671162985871,
+      "income_regularity": 0.711023517996528
+    },
+    {
+      "record_id": "rec_0019",
+      "base_logodds": -0.7521534376240592,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.20050467658179744,
+      "income_regularity": 0.6907776660770875
+    },
+    {
+      "record_id": "rec_0020",
+      "base_logodds": -0.9258428293033185,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.9023323708694239,
+      "income_regularity": 0.8736055850725678
+    },
+    {
+      "record_id": "rec_0021",
+      "base_logodds": 0.5228538753238449,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.5062375666984548,
+      "income_regularity": 0.3909783866933815
+    },
+    {
+      "record_id": "rec_0022",
+      "base_logodds": 0.5662924572016227,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.3482005312578711,
+      "income_regularity": 0.42656169837276803
+    },
+    {
+      "record_id": "rec_0023",
+      "base_logodds": -0.029936051230334024,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.4202045037508632,
+      "income_regularity": 0.10540017006016224
+    },
+    {
+      "record_id": "rec_0024",
+      "base_logodds": 0.5907856744513369,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.12358292161208248,
+      "income_regularity": 0.6305741859485156
+    },
+    {
+      "record_id": "rec_0025",
+      "base_logodds": 0.40703838068746495,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.25110803291653533,
+      "income_regularity": 0.6732252053632479
+    },
+    {
+      "record_id": "rec_0026",
+      "base_logodds": 0.9401221507925871,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.1579386787255368,
+      "income_regularity": 0.1521754550624527
+    },
+    {
+      "record_id": "rec_0027",
+      "base_logodds": 1.7436598618234642,
+      "is_truly_dead": true,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.17116335128888757,
+      "income_regularity": 0.15936829336371844
+    },
+    {
+      "record_id": "rec_0028",
+      "base_logodds": 0.9886095119942564,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.2747484126773242,
+      "income_regularity": 0.2408346153666946
+    },
+    {
+      "record_id": "rec_0029",
+      "base_logodds": 0.20650644026274392,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.2747484126773242,
+      "income_regularity": 0.2408346153666946
+    },
+    {
+      "record_id": "rec_0030",
+      "base_logodds": -0.7004274668973057,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.16583324190669596,
+      "income_regularity": 0.17067019556767704
+    },
+    {
+      "record_id": "rec_0031",
+      "base_logodds": 0.22025253250418378,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    {
+      "record_id": "rec_0032",
+      "base_logodds": 0.06251078392222151,
+      "is_truly_dead": false,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.7636549093742538,
+      "income_regularity": 0.4629026922859265
+    },
+    {
+      "record_id": "rec_0033",
+      "base_logodds": -0.2100094091867827,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.9366100940539898,
+      "income_regularity": 0.7176285969894013
+    },
+    {
+      "record_id": "rec_0034",
+      "base_logodds": -1.2741106727053026,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    {
+      "record_id": "rec_0035",
+      "base_logodds": -0.09769938287448669,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.5761760743194584,
+      "income_regularity": 0.16534586554107078
+    },
+    {
+      "record_id": "rec_0036",
+      "base_logodds": 0.0021851258874673687,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.5483934239731343,
+      "income_regularity": 0.922994090491126
+    },
+    {
+      "record_id": "rec_0037",
+      "base_logodds": -0.5386481112012191,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.3026636578540228,
+      "income_regularity": 0.2942070136141868
+    },
+    {
+      "record_id": "rec_0038",
+      "base_logodds": -0.5717892103119054,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.8844303099691576,
+      "income_regularity": 0.636935567692943
+    },
+    {
+      "record_id": "rec_0039",
+      "base_logodds": 0.894233183817844,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.9362994907479911,
+      "income_regularity": 0.7569039589461452
+    },
+    {
+      "record_id": "rec_0040",
+      "base_logodds": -1.5148638553179894,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.7636549093742538,
+      "income_regularity": 0.4629026922859265
+    },
+    {
+      "record_id": "rec_0041",
+      "base_logodds": -0.7642846227999864,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.17320806465748828,
+      "income_regularity": 0.44265225021129395
+    },
+    {
+      "record_id": "rec_0042",
+      "base_logodds": -0.01237542395544178,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.5483934239731343,
+      "income_regularity": 0.922994090491126
+    },
+    {
+      "record_id": "rec_0043",
+      "base_logodds": 0.06132610339898151,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.26476688935396786,
+      "income_regularity": 0.3243688134419406
+    },
+    {
+      "record_id": "rec_0044",
+      "base_logodds": 0.7188318240219577,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    {
+      "record_id": "rec_0045",
+      "base_logodds": 1.0046732149405233,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.5513439647456306,
+      "income_regularity": 0.2733907682147105
+    },
+    {
+      "record_id": "rec_0046",
+      "base_logodds": -0.5711949574635489,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.8688534333904128,
+      "income_regularity": 0.5124426570117055
+    },
+    {
+      "record_id": "rec_0047",
+      "base_logodds": 0.047714614665398884,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.2857761265644616,
+      "income_regularity": 0.4502259695523627
+    },
+    {
+      "record_id": "rec_0048",
+      "base_logodds": -0.8164479952880884,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.9366100940539898,
+      "income_regularity": 0.7176285969894013
+    },
+    {
+      "record_id": "rec_0049",
+      "base_logodds": 1.8592192948328088,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.4844906813265746,
+      "income_regularity": 0.3031896027092759
+    },
+    {
+      "record_id": "rec_0050",
+      "base_logodds": 0.37546582238034903,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.2006812349238925,
+      "income_regularity": 0.946414372174915
+    },
+    {
+      "record_id": "rec_0051",
+      "base_logodds": -0.7207721252570475,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.20016902362793276,
+      "income_regularity": 0.14510934860728417
+    },
+    {
+      "record_id": "rec_0052",
+      "base_logodds": -1.3828445756391474,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.7602180865063761,
+      "income_regularity": 0.3629445318427257
+    },
+    {
+      "record_id": "rec_0053",
+      "base_logodds": 0.6771205903026989,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.663195637485225,
+      "income_regularity": 0.6898376443769406
+    },
+    {
+      "record_id": "rec_0054",
+      "base_logodds": -0.13794912735474057,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.7636549093742538,
+      "income_regularity": 0.4629026922859265
+    },
+    {
+      "record_id": "rec_0055",
+      "base_logodds": -1.860299975211523,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.1579386787255368,
+      "income_regularity": 0.1521754550624527
+    },
+    {
+      "record_id": "rec_0056",
+      "base_logodds": 2.3708798111173714,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.20016902362793276,
+      "income_regularity": 0.14510934860728417
+    },
+    {
+      "record_id": "rec_0057",
+      "base_logodds": 0.5203662364033961,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.29263416772725104,
+      "income_regularity": 0.16215376867448789
+    },
+    {
+      "record_id": "rec_0058",
+      "base_logodds": 0.10936534173648711,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.6097926629845459,
+      "income_regularity": 0.37041554894014933
+    },
+    {
+      "record_id": "rec_0059",
+      "base_logodds": 0.031496343611372477,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.16968949644535397,
+      "income_regularity": 0.1381843484674214
+    },
+    {
+      "record_id": "rec_0060",
+      "base_logodds": 0.5890570140532416,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.6932157533246204,
+      "income_regularity": 0.8460554234824081
+    },
+    {
+      "record_id": "rec_0061",
+      "base_logodds": -1.3797249733581047,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.29263416772725104,
+      "income_regularity": 0.16215376867448789
+    },
+    {
+      "record_id": "rec_0062",
+      "base_logodds": 0.23029707616458897,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.5513439647456306,
+      "income_regularity": 0.2733907682147105
+    },
+    {
+      "record_id": "rec_0063",
+      "base_logodds": -0.49134416163428135,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.5949671966250272,
+      "income_regularity": 0.3653010125282449
+    },
+    {
+      "record_id": "rec_0064",
+      "base_logodds": -1.3674525158352635,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.7602180865063761,
+      "income_regularity": 0.3629445318427257
+    },
+    {
+      "record_id": "rec_0065",
+      "base_logodds": 1.1836742233169626,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.1579386787255368,
+      "income_regularity": 0.1521754550624527
+    },
+    {
+      "record_id": "rec_0066",
+      "base_logodds": 0.8717949700180542,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.8698441160426202,
+      "income_regularity": 0.41712609632724024
+    },
+    {
+      "record_id": "rec_0067",
+      "base_logodds": -0.15944437174975662,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.5949671966250272,
+      "income_regularity": 0.3653010125282449
+    },
+    {
+      "record_id": "rec_0068",
+      "base_logodds": -0.09491296568080222,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.6234067649781901,
+      "income_regularity": 0.22898526398381838
+    },
+    {
+      "record_id": "rec_0069",
+      "base_logodds": -0.6381368354052525,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.6097926629845459,
+      "income_regularity": 0.37041554894014933
+    },
+    {
+      "record_id": "rec_0070",
+      "base_logodds": -1.0868253268110417,
+      "is_truly_dead": false,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.5949671966250272,
+      "income_regularity": 0.3653010125282449
+    },
+    {
+      "record_id": "rec_0071",
+      "base_logodds": 0.2513366774824618,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.39797743698045446,
+      "income_regularity": 0.9413041713569592
+    },
+    {
+      "record_id": "rec_0072",
+      "base_logodds": 0.1538140055545459,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.22561525681015412,
+      "income_regularity": 0.3615424594446854
+    },
+    {
+      "record_id": "rec_0073",
+      "base_logodds": -0.16586335689577475,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6932157533246204,
+      "income_regularity": 0.8460554234824081
+    },
+    {
+      "record_id": "rec_0074",
+      "base_logodds": 1.514345832500564,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.6293164150163882,
+      "income_regularity": 0.2718917486644242
+    },
+    {
+      "record_id": "rec_0075",
+      "base_logodds": 1.2684793465738504,
+      "is_truly_dead": true,
+      "seeded_class": "card_expired",
+      "engagement": 0.4235352833405338,
+      "income_regularity": 0.4772182583748097
+    },
+    {
+      "record_id": "rec_0076",
+      "base_logodds": -0.9412187062213206,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.6183779830114192,
+      "income_regularity": 0.6987254812999694
+    },
+    {
+      "record_id": "rec_0077",
+      "base_logodds": -0.07688965658319219,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.07200502625703233,
+      "income_regularity": 0.7170093076472449
+    },
+    {
+      "record_id": "rec_0078",
+      "base_logodds": 0.7469544252605803,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.2747484126773242,
+      "income_regularity": 0.2408346153666946
+    },
+    {
+      "record_id": "rec_0079",
+      "base_logodds": 0.3685247500149214,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.4300817947153257,
+      "income_regularity": 0.3870177825839184
+    },
+    {
+      "record_id": "rec_0080",
+      "base_logodds": -0.6117833011915096,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.5378617193044147,
+      "income_regularity": 0.7904919727079114
+    },
+    {
+      "record_id": "rec_0081",
+      "base_logodds": -0.6646232902369608,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    {
+      "record_id": "rec_0082",
+      "base_logodds": 1.1261557033044844,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.5747645367096538,
+      "income_regularity": 0.3742958903412257
+    },
+    {
+      "record_id": "rec_0083",
+      "base_logodds": 1.109935661376455,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.07903816627876774,
+      "income_regularity": 0.2408613891054113
+    },
+    {
+      "record_id": "rec_0084",
+      "base_logodds": -0.9837687015378926,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.4300817947153257,
+      "income_regularity": 0.3870177825839184
+    },
+    {
+      "record_id": "rec_0085",
+      "base_logodds": -2.165982999338739,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.2747484126773242,
+      "income_regularity": 0.2408346153666946
+    },
+    {
+      "record_id": "rec_0086",
+      "base_logodds": 1.3185579684623723,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.9959110652635228,
+      "income_regularity": 0.7143083474309412
+    },
+    {
+      "record_id": "rec_0087",
+      "base_logodds": 1.5642985920131314,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.20050467658179744,
+      "income_regularity": 0.6907776660770875
+    },
+    {
+      "record_id": "rec_0088",
+      "base_logodds": 0.4084724370181618,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.22847286551025223,
+      "income_regularity": 0.3375893238886763
+    },
+    {
+      "record_id": "rec_0089",
+      "base_logodds": -0.17471630895843634,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.6654256478464319,
+      "income_regularity": 0.3862750385294522
+    },
+    {
+      "record_id": "rec_0090",
+      "base_logodds": 1.5993595254106623,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.41187190465605433,
+      "income_regularity": 0.8545527593316411
+    },
+    {
+      "record_id": "rec_0091",
+      "base_logodds": 2.5089143468926367,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.5524869799764038,
+      "income_regularity": 0.7557691849261987
+    },
+    {
+      "record_id": "rec_0092",
+      "base_logodds": -0.4159417359432735,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.26476688935396786,
+      "income_regularity": 0.3243688134419406
+    },
+    {
+      "record_id": "rec_0093",
+      "base_logodds": -0.6815095954529049,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6097926629845459,
+      "income_regularity": 0.37041554894014933
+    },
+    {
+      "record_id": "rec_0094",
+      "base_logodds": -0.4116325164286991,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.4300817947153257,
+      "income_regularity": 0.3870177825839184
+    },
+    {
+      "record_id": "rec_0095",
+      "base_logodds": -0.33065707837188285,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.5062375666984548,
+      "income_regularity": 0.3909783866933815
+    },
+    {
+      "record_id": "rec_0096",
+      "base_logodds": -0.5636367699091964,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.2747484126773242,
+      "income_regularity": 0.2408346153666946
+    },
+    {
+      "record_id": "rec_0097",
+      "base_logodds": 1.5793445957550454,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6598459461163124,
+      "income_regularity": 0.301433643486195
+    },
+    {
+      "record_id": "rec_0098",
+      "base_logodds": 1.5647142048170082,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.663195637485225,
+      "income_regularity": 0.6898376443769406
+    },
+    {
+      "record_id": "rec_0099",
+      "base_logodds": -0.0011400962717372225,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.5949671966250272,
+      "income_regularity": 0.3653010125282449
+    },
+    {
+      "record_id": "rec_0100",
+      "base_logodds": 0.05240202364306215,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6234067649781901,
+      "income_regularity": 0.22898526398381838
+    },
+    {
+      "record_id": "rec_0101",
+      "base_logodds": -1.168373503947209,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.4300817947153257,
+      "income_regularity": 0.3870177825839184
+    },
+    {
+      "record_id": "rec_0102",
+      "base_logodds": 1.2612583914980835,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    {
+      "record_id": "rec_0103",
+      "base_logodds": 0.46234027079534334,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.004080059718720759,
+      "income_regularity": 0.42259871184908654
+    },
+    {
+      "record_id": "rec_0104",
+      "base_logodds": -1.781927924032639,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6932157533246204,
+      "income_regularity": 0.8460554234824081
+    },
+    {
+      "record_id": "rec_0105",
+      "base_logodds": -0.5272147026736228,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.9362994907479911,
+      "income_regularity": 0.7569039589461452
+    },
+    {
+      "record_id": "rec_0106",
+      "base_logodds": 0.19060997410795388,
+      "is_truly_dead": false,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.29263416772725104,
+      "income_regularity": 0.16215376867448789
+    },
+    {
+      "record_id": "rec_0107",
+      "base_logodds": -0.7108801701406087,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.5483934239731343,
+      "income_regularity": 0.922994090491126
+    },
+    {
+      "record_id": "rec_0108",
+      "base_logodds": 0.14886001936579485,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.4402292152684228,
+      "income_regularity": 0.5357006286839475
+    },
+    {
+      "record_id": "rec_0109",
+      "base_logodds": -0.7758833061900143,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.9959110652635228,
+      "income_regularity": 0.7143083474309412
+    },
+    {
+      "record_id": "rec_0110",
+      "base_logodds": -0.8407366056117168,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.3307040345949292,
+      "income_regularity": 0.5648286595204437
+    },
+    {
+      "record_id": "rec_0111",
+      "base_logodds": -1.9675393215237877,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    {
+      "record_id": "rec_0112",
+      "base_logodds": 1.0942453351543406,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.5483934239731343,
+      "income_regularity": 0.922994090491126
+    },
+    {
+      "record_id": "rec_0113",
+      "base_logodds": 0.6777541169382161,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.3026636578540228,
+      "income_regularity": 0.2942070136141868
+    },
+    {
+      "record_id": "rec_0114",
+      "base_logodds": -0.2142232170438006,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.33111109520280846,
+      "income_regularity": 0.5157548983359073
+    },
+    {
+      "record_id": "rec_0115",
+      "base_logodds": -0.5760878575714727,
+      "is_truly_dead": false,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.3307040345949292,
+      "income_regularity": 0.5648286595204437
+    },
+    {
+      "record_id": "rec_0116",
+      "base_logodds": -1.334268556181045,
+      "is_truly_dead": false,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.4325556861564993,
+      "income_regularity": 0.6260587007932348
+    },
+    {
+      "record_id": "rec_0117",
+      "base_logodds": 0.05538623702554975,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.6168289072189094,
+      "income_regularity": 0.042797504478671276
+    },
+    {
+      "record_id": "rec_0118",
+      "base_logodds": 0.48641583833795393,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.2747484126773242,
+      "income_regularity": 0.2408346153666946
+    },
+    {
+      "record_id": "rec_0119",
+      "base_logodds": 0.33627295020326453,
+      "is_truly_dead": true,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.3279021824717896,
+      "income_regularity": 0.5833871672622851
+    },
+    {
+      "record_id": "rec_0120",
+      "base_logodds": 0.24527502187083663,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.3857863089663646,
+      "income_regularity": 0.7953664005819342
+    },
+    {
+      "record_id": "rec_0121",
+      "base_logodds": 1.5665692343371,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.2747484126773242,
+      "income_regularity": 0.2408346153666946
+    },
+    {
+      "record_id": "rec_0122",
+      "base_logodds": -1.2380184209874594,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6293164150163882,
+      "income_regularity": 0.2718917486644242
+    },
+    {
+      "record_id": "rec_0123",
+      "base_logodds": 0.03186458146687928,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    {
+      "record_id": "rec_0124",
+      "base_logodds": 1.6002163122214506,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    {
+      "record_id": "rec_0125",
+      "base_logodds": 0.7210252358516211,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.4300817947153257,
+      "income_regularity": 0.3870177825839184
+    },
+    {
+      "record_id": "rec_0126",
+      "base_logodds": 0.43312193472791183,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.20050467658179744,
+      "income_regularity": 0.6907776660770875
+    },
+    {
+      "record_id": "rec_0127",
+      "base_logodds": 0.17794131542627523,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.5062375666984548,
+      "income_regularity": 0.3909783866933815
+    },
+    {
+      "record_id": "rec_0128",
+      "base_logodds": 0.5987080325139559,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.3857863089663646,
+      "income_regularity": 0.7953664005819342
+    },
+    {
+      "record_id": "rec_0129",
+      "base_logodds": 0.26340282007280885,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.22561525681015412,
+      "income_regularity": 0.3615424594446854
+    },
+    {
+      "record_id": "rec_0130",
+      "base_logodds": 0.25721962165429585,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.5483934239731343,
+      "income_regularity": 0.922994090491126
+    },
+    {
+      "record_id": "rec_0131",
+      "base_logodds": -0.4376273109943195,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.7814283254602891,
+      "income_regularity": 0.8401818562117055
+    },
+    {
+      "record_id": "rec_0132",
+      "base_logodds": -0.2728581859469289,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.20050467658179744,
+      "income_regularity": 0.6907776660770875
+    },
+    {
+      "record_id": "rec_0133",
+      "base_logodds": -1.0365728488613506,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.3482005312578711,
+      "income_regularity": 0.42656169837276803
+    },
+    {
+      "record_id": "rec_0134",
+      "base_logodds": -0.1683805120222256,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6293164150163882,
+      "income_regularity": 0.2718917486644242
+    },
+    {
+      "record_id": "rec_0135",
+      "base_logodds": 1.2503486289348849,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.5949671966250272,
+      "income_regularity": 0.3653010125282449
+    },
+    {
+      "record_id": "rec_0136",
+      "base_logodds": -0.5856355555027073,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.17320806465748828,
+      "income_regularity": 0.44265225021129395
+    },
+    {
+      "record_id": "rec_0137",
+      "base_logodds": 1.3705973167518168,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.3872181970736133,
+      "income_regularity": 0.30257504341988645
+    },
+    {
+      "record_id": "rec_0138",
+      "base_logodds": 0.18563891882731176,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.39797743698045446,
+      "income_regularity": 0.9413041713569592
+    },
+    {
+      "record_id": "rec_0139",
+      "base_logodds": 1.0482486618760463,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.4202045037508632,
+      "income_regularity": 0.10540017006016224
+    },
+    {
+      "record_id": "rec_0140",
+      "base_logodds": -0.2372998576208802,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.3279021824717896,
+      "income_regularity": 0.5833871672622851
+    },
+    {
+      "record_id": "rec_0141",
+      "base_logodds": 0.25786293994461995,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.7852775312722521,
+      "income_regularity": 0.8954898565779037
+    },
+    {
+      "record_id": "rec_0142",
+      "base_logodds": 0.5286239733997251,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.41187190465605433,
+      "income_regularity": 0.8545527593316411
+    },
+    {
+      "record_id": "rec_0143",
+      "base_logodds": 0.8420763367751933,
+      "is_truly_dead": true,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.9223212620686891,
+      "income_regularity": 0.7644244588903458
+    },
+    {
+      "record_id": "rec_0144",
+      "base_logodds": -0.4794881539940133,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.16968949644535397,
+      "income_regularity": 0.1381843484674214
+    },
+    {
+      "record_id": "rec_0145",
+      "base_logodds": 1.277582281299718,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.2006812349238925,
+      "income_regularity": 0.946414372174915
+    },
+    {
+      "record_id": "rec_0146",
+      "base_logodds": 0.5331162255456532,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.9366100940539898,
+      "income_regularity": 0.7176285969894013
+    },
+    {
+      "record_id": "rec_0147",
+      "base_logodds": 0.20135026155830757,
+      "is_truly_dead": false,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    {
+      "record_id": "rec_0148",
+      "base_logodds": -0.1246848108507693,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.3857863089663646,
+      "income_regularity": 0.7953664005819342
+    },
+    {
+      "record_id": "rec_0149",
+      "base_logodds": 0.8981485608112169,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.29263416772725104,
+      "income_regularity": 0.16215376867448789
+    },
+    {
+      "record_id": "rec_0150",
+      "base_logodds": -0.9955151632693243,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.32080369716848506,
+      "income_regularity": 0.7157940258086924
+    },
+    {
+      "record_id": "rec_0151",
+      "base_logodds": -0.6193208928817485,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6234067649781901,
+      "income_regularity": 0.22898526398381838
+    },
+    {
+      "record_id": "rec_0152",
+      "base_logodds": 0.9960762908669443,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    {
+      "record_id": "rec_0153",
+      "base_logodds": -1.2796158560223767,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.20050467658179744,
+      "income_regularity": 0.6907776660770875
+    },
+    {
+      "record_id": "rec_0154",
+      "base_logodds": 0.20736391293065834,
+      "is_truly_dead": false,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.17116335128888757,
+      "income_regularity": 0.15936829336371844
+    },
+    {
+      "record_id": "rec_0155",
+      "base_logodds": 0.6073661524690633,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.4300817947153257,
+      "income_regularity": 0.3870177825839184
+    },
+    {
+      "record_id": "rec_0156",
+      "base_logodds": -2.031248016662237,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.4300817947153257,
+      "income_regularity": 0.3870177825839184
+    },
+    {
+      "record_id": "rec_0157",
+      "base_logodds": 0.8182669302665534,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.17320806465748828,
+      "income_regularity": 0.44265225021129395
+    },
+    {
+      "record_id": "rec_0158",
+      "base_logodds": 0.15104836075292863,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.405691600687715,
+      "income_regularity": 0.20828167422678182
+    },
+    {
+      "record_id": "rec_0159",
+      "base_logodds": -1.4909856838905309,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.20728404534710695,
+      "income_regularity": 0.6838785995108759
+    },
+    {
+      "record_id": "rec_0160",
+      "base_logodds": 0.006330452090729688,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.9982603926757818,
+      "income_regularity": 0.9506162567071536
+    },
+    {
+      "record_id": "rec_0161",
+      "base_logodds": 0.5486192815131916,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.6598459461163124,
+      "income_regularity": 0.301433643486195
+    },
+    {
+      "record_id": "rec_0162",
+      "base_logodds": -0.20240400661961777,
+      "is_truly_dead": false,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.663195637485225,
+      "income_regularity": 0.6898376443769406
+    },
+    {
+      "record_id": "rec_0163",
+      "base_logodds": -0.8901510276677188,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.4325556861564993,
+      "income_regularity": 0.6260587007932348
+    },
+    {
+      "record_id": "rec_0164",
+      "base_logodds": -0.9432772979747588,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.31167118367395424,
+      "income_regularity": 0.37837112227457953
+    },
+    {
+      "record_id": "rec_0165",
+      "base_logodds": 1.065468356393522,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.3307040345949292,
+      "income_regularity": 0.5648286595204437
+    },
+    {
+      "record_id": "rec_0166",
+      "base_logodds": 0.4415123994106708,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.3531444952991269,
+      "income_regularity": 0.6959370647824018
+    },
+    {
+      "record_id": "rec_0167",
+      "base_logodds": -1.97367033019515,
+      "is_truly_dead": false,
+      "seeded_class": "mandate_broken",
+      "engagement": 0.5761760743194584,
+      "income_regularity": 0.16534586554107078
+    },
+    {
+      "record_id": "rec_0168",
+      "base_logodds": -1.0327891033824639,
+      "is_truly_dead": true,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.5524869799764038,
+      "income_regularity": 0.7557691849261987
+    },
+    {
+      "record_id": "rec_0169",
+      "base_logodds": -0.05044773952264277,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.5747645367096538,
+      "income_regularity": 0.3742958903412257
+    },
+    {
+      "record_id": "rec_0170",
+      "base_logodds": -0.5868702858247823,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.7602180865063761,
+      "income_regularity": 0.3629445318427257
+    },
+    {
+      "record_id": "rec_0171",
+      "base_logodds": 0.09486590043642863,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.6293164150163882,
+      "income_regularity": 0.2718917486644242
+    },
+    {
+      "record_id": "rec_0172",
+      "base_logodds": 1.1096291759217742,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.5378617193044147,
+      "income_regularity": 0.7904919727079114
+    },
+    {
+      "record_id": "rec_0173",
+      "base_logodds": 0.7901223555106974,
+      "is_truly_dead": false,
+      "seeded_class": "do_not_honour",
+      "engagement": 0.4844906813265746,
+      "income_regularity": 0.3031896027092759
+    },
+    {
+      "record_id": "rec_0174",
+      "base_logodds": -1.495588810845668,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.6187399478808134,
+      "income_regularity": 0.5090869172754741
+    },
+    {
+      "record_id": "rec_0175",
+      "base_logodds": 0.30466828248840205,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.17320806465748828,
+      "income_regularity": 0.44265225021129395
+    },
+    {
+      "record_id": "rec_0176",
+      "base_logodds": -0.12282106539719219,
+      "is_truly_dead": false,
+      "seeded_class": "insufficient_funds",
+      "engagement": 0.28547213357566303,
+      "income_regularity": 0.5013389769700828
+    },
+    {
+      "record_id": "rec_0177",
+      "base_logodds": 0.12784415298324409,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.8844303099691576,
+      "income_regularity": 0.636935567692943
+    },
+    {
+      "record_id": "rec_0178",
+      "base_logodds": 0.4894567096110685,
+      "is_truly_dead": false,
+      "seeded_class": "card_expired",
+      "engagement": 0.1591399097975132,
+      "income_regularity": 0.62524501110664
+    },
+    {
+      "record_id": "rec_0179",
+      "base_logodds": -1.0524552738781183,
+      "is_truly_dead": false,
+      "seeded_class": "bank_downtime",
+      "engagement": 0.16968949644535397,
+      "income_regularity": 0.1381843484674214
+    }
+  ],
+  "customer_traits": {
+    "cust_0000": {
+      "engagement": 0.07200502625703233,
+      "income_regularity": 0.7170093076472449
+    },
+    "cust_0001": {
+      "engagement": 0.31167118367395424,
+      "income_regularity": 0.37837112227457953
+    },
+    "cust_0002": {
+      "engagement": 0.6925864414254158,
+      "income_regularity": 0.5251859155074001
+    },
+    "cust_0003": {
+      "engagement": 0.22847286551025223,
+      "income_regularity": 0.3375893238886763
+    },
+    "cust_0004": {
+      "engagement": 0.7636549093742538,
+      "income_regularity": 0.4629026922859265
+    },
+    "cust_0005": {
+      "engagement": 0.9982603926757818,
+      "income_regularity": 0.9506162567071536
+    },
+    "cust_0006": {
+      "engagement": 0.5524869799764038,
+      "income_regularity": 0.7557691849261987
+    },
+    "cust_0007": {
+      "engagement": 0.5761760743194584,
+      "income_regularity": 0.16534586554107078
+    },
+    "cust_0008": {
+      "engagement": 0.5378617193044147,
+      "income_regularity": 0.7904919727079114
+    },
+    "cust_0009": {
+      "engagement": 0.16583324190669596,
+      "income_regularity": 0.17067019556767704
+    },
+    "cust_0010": {
+      "engagement": 0.9362994907479911,
+      "income_regularity": 0.7569039589461452
+    },
+    "cust_0011": {
+      "engagement": 0.6654256478464319,
+      "income_regularity": 0.3862750385294522
+    },
+    "cust_0012": {
+      "engagement": 0.3872181970736133,
+      "income_regularity": 0.30257504341988645
+    },
+    "cust_0013": {
+      "engagement": 0.20050467658179744,
+      "income_regularity": 0.6907776660770875
+    },
+    "cust_0014": {
+      "engagement": 0.6932157533246204,
+      "income_regularity": 0.8460554234824081
+    },
+    "cust_0015": {
+      "engagement": 0.6598459461163124,
+      "income_regularity": 0.301433643486195
+    },
+    "cust_0016": {
+      "engagement": 0.6187399478808134,
+      "income_regularity": 0.5090869172754741
+    },
+    "cust_0017": {
+      "engagement": 0.3531444952991269,
+      "income_regularity": 0.6959370647824018
+    },
+    "cust_0018": {
+      "engagement": 0.9023323708694239,
+      "income_regularity": 0.8736055850725678
+    },
+    "cust_0019": {
+      "engagement": 0.6097926629845459,
+      "income_regularity": 0.37041554894014933
+    },
+    "cust_0020": {
+      "engagement": 0.41187190465605433,
+      "income_regularity": 0.8545527593316411
+    },
+    "cust_0021": {
+      "engagement": 0.6168289072189094,
+      "income_regularity": 0.042797504478671276
+    },
+    "cust_0022": {
+      "engagement": 0.5747645367096538,
+      "income_regularity": 0.3742958903412257
+    },
+    "cust_0023": {
+      "engagement": 0.29263416772725104,
+      "income_regularity": 0.16215376867448789
+    },
+    "cust_0024": {
+      "engagement": 0.7602180865063761,
+      "income_regularity": 0.3629445318427257
+    },
+    "cust_0025": {
+      "engagement": 0.3482005312578711,
+      "income_regularity": 0.42656169837276803
+    },
+    "cust_0026": {
+      "engagement": 0.4202045037508632,
+      "income_regularity": 0.10540017006016224
+    },
+    "cust_0027": {
+      "engagement": 0.4235352833405338,
+      "income_regularity": 0.4772182583748097
+    },
+    "cust_0028": {
+      "engagement": 0.3026636578540228,
+      "income_regularity": 0.2942070136141868
+    },
+    "cust_0029": {
+      "engagement": 0.1579386787255368,
+      "income_regularity": 0.1521754550624527
+    },
+    "cust_0030": {
+      "engagement": 0.4402292152684228,
+      "income_regularity": 0.5357006286839475
+    },
+    "cust_0031": {
+      "engagement": 0.7105394611791646,
+      "income_regularity": 0.8235207772068796
+    },
+    "cust_0032": {
+      "engagement": 0.2785671162985871,
+      "income_regularity": 0.711023517996528
+    },
+    "cust_0033": {
+      "engagement": 0.3307040345949292,
+      "income_regularity": 0.5648286595204437
+    },
+    "cust_0034": {
+      "engagement": 0.405691600687715,
+      "income_regularity": 0.20828167422678182
+    },
+    "cust_0035": {
+      "engagement": 0.5949671966250272,
+      "income_regularity": 0.3653010125282449
+    },
+    "cust_0036": {
+      "engagement": 0.663195637485225,
+      "income_regularity": 0.6898376443769406
+    },
+    "cust_0037": {
+      "engagement": 0.6293164150163882,
+      "income_regularity": 0.2718917486644242
+    },
+    "cust_0038": {
+      "engagement": 0.20728404534710695,
+      "income_regularity": 0.6838785995108759
+    },
+    "cust_0039": {
+      "engagement": 0.9366100940539898,
+      "income_regularity": 0.7176285969894013
+    },
+    "cust_0040": {
+      "engagement": 0.8844303099691576,
+      "income_regularity": 0.636935567692943
+    },
+    "cust_0041": {
+      "engagement": 0.3279021824717896,
+      "income_regularity": 0.5833871672622851
+    },
+    "cust_0042": {
+      "engagement": 0.39797743698045446,
+      "income_regularity": 0.9413041713569592
+    },
+    "cust_0043": {
+      "engagement": 0.20016902362793276,
+      "income_regularity": 0.14510934860728417
+    },
+    "cust_0044": {
+      "engagement": 0.1591399097975132,
+      "income_regularity": 0.62524501110664
+    },
+    "cust_0045": {
+      "engagement": 0.004080059718720759,
+      "income_regularity": 0.42259871184908654
+    },
+    "cust_0046": {
+      "engagement": 0.9223212620686891,
+      "income_regularity": 0.7644244588903458
+    },
+    "cust_0047": {
+      "engagement": 0.07903816627876774,
+      "income_regularity": 0.2408613891054113
+    },
+    "cust_0048": {
+      "engagement": 0.16968949644535397,
+      "income_regularity": 0.1381843484674214
+    },
+    "cust_0049": {
+      "engagement": 0.5513439647456306,
+      "income_regularity": 0.2733907682147105
+    },
+    "cust_0050": {
+      "engagement": 0.6183779830114192,
+      "income_regularity": 0.6987254812999694
+    },
+    "cust_0051": {
+      "engagement": 0.17116335128888757,
+      "income_regularity": 0.15936829336371844
+    },
+    "cust_0052": {
+      "engagement": 0.8698441160426202,
+      "income_regularity": 0.41712609632724024
+    },
+    "cust_0053": {
+      "engagement": 0.5483934239731343,
+      "income_regularity": 0.922994090491126
+    },
+    "cust_0054": {
+      "engagement": 0.3857863089663646,
+      "income_regularity": 0.7953664005819342
+    },
+    "cust_0055": {
+      "engagement": 0.17320806465748828,
+      "income_regularity": 0.44265225021129395
+    },
+    "cust_0056": {
+      "engagement": 0.2006812349238925,
+      "income_regularity": 0.946414372174915
+    },
+    "cust_0057": {
+      "engagement": 0.2857761265644616,
+      "income_regularity": 0.4502259695523627
+    },
+    "cust_0058": {
+      "engagement": 0.22561525681015412,
+      "income_regularity": 0.3615424594446854
+    },
+    "cust_0059": {
+      "engagement": 0.5062375666984548,
+      "income_regularity": 0.3909783866933815
+    },
+    "cust_0060": {
+      "engagement": 0.9959110652635228,
+      "income_regularity": 0.7143083474309412
+    },
+    "cust_0061": {
+      "engagement": 0.2747484126773242,
+      "income_regularity": 0.2408346153666946
+    },
+    "cust_0062": {
+      "engagement": 0.4300817947153257,
+      "income_regularity": 0.3870177825839184
+    },
+    "cust_0063": {
+      "engagement": 0.7852775312722521,
+      "income_regularity": 0.8954898565779037
+    },
+    "cust_0064": {
+      "engagement": 0.4325556861564993,
+      "income_regularity": 0.6260587007932348
+    },
+    "cust_0065": {
+      "engagement": 0.7814283254602891,
+      "income_regularity": 0.8401818562117055
+    },
+    "cust_0066": {
+      "engagement": 0.25110803291653533,
+      "income_regularity": 0.6732252053632479
+    },
+    "cust_0067": {
+      "engagement": 0.12358292161208248,
+      "income_regularity": 0.6305741859485156
+    },
+    "cust_0068": {
+      "engagement": 0.32080369716848506,
+      "income_regularity": 0.7157940258086924
+    },
+    "cust_0069": {
+      "engagement": 0.8688534333904128,
+      "income_regularity": 0.5124426570117055
+    },
+    "cust_0070": {
+      "engagement": 0.28547213357566303,
+      "income_regularity": 0.5013389769700828
+    },
+    "cust_0071": {
+      "engagement": 0.6234067649781901,
+      "income_regularity": 0.22898526398381838
+    },
+    "cust_0072": {
+      "engagement": 0.26476688935396786,
+      "income_regularity": 0.3243688134419406
+    },
+    "cust_0073": {
+      "engagement": 0.4844906813265746,
+      "income_regularity": 0.3031896027092759
+    },
+    "cust_0074": {
+      "engagement": 0.33111109520280846,
+      "income_regularity": 0.5157548983359073
+    }
+  }
+}

@@ -1,0 +1,23 @@
+# Phase 1 needs only these two. Everything else is commented until the phase
+# that introduces it, and every bound below was verified against PyPI rather
+# than written from memory (the langgraph-pin lesson).
+numpy>=2.0,<3.0
+pytest>=8.0,<10.0
+
+# ---- Phase 2/3: the agent graph + payments API -----------------------------
+langgraph>=1.2,<2.0
+langgraph-cli>=0.4,<1.0
+razorpay>=1.4,<2.0
+python-dotenv>=1.0,<2.0
+
+# ---- Phase 3 integration (FastAPI webhook seam, Claude narrator) -----------
+# fastapi>=0.115,<1.0
+# uvicorn>=0.30,<1.0
+# anthropic>=0.40
+
+# ---- Phase 4: propensity model ---------------------------------------------
+# Verified installable together (lightgbm 4.7, sklearn 1.x). joblib ships with
+# scikit-learn but is pinned explicitly because model.save/load imports it.
+lightgbm>=4.0,<5.0
+scikit-learn>=1.5,<2.0
+joblib>=1.3,<2.0

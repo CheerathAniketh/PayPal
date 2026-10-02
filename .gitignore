@@ -1,0 +1,21 @@
+# Secrets: a leaked key, even a test one, is a bad look on a public submission.
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# Local databases / build artefacts
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+
+# LangGraph dev
+.langgraph_api/
+
+PROGRESS.md
