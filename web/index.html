@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recoup</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32/styles/ag-grid.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32/styles/ag-theme-quartz.css">
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#14181f; --muted:#5f6b7a; --line:#e2e6ec;
+          --green:#16794c; --greenbg:#dff4e8; --red:#b42318; --redbg:#fde4e1;
+          --amber:#8a5a00; --amberbg:#fdf0d0; --grey:#4b5563; --greybg:#e8ebf0; --blue:#1d4ed8; --bluebg:#e0e9ff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:1500px; margin:0 auto; padding:20px 20px 40px; }
+  header { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 16px; margin-bottom:14px; }
+  h1 { margin:0; font-size:26px; letter-spacing:-.02em; }
+  .tag { color:var(--muted); font-size:15px; }
+  .banner { background:var(--amberbg); color:var(--amber); border:1px solid #f1d58a; border-radius:8px; padding:8px 12px; margin-bottom:14px; font-size:13px; }
+  .err { background:var(--redbg); color:var(--red); border:1px solid #f4b4ad; border-radius:8px; padding:10px 12px; margin-bottom:14px; display:none; }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:18px; }
+  .kpi { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .kpi .l { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  .kpi .v { font-size:24px; font-weight:650; margin-top:2px; letter-spacing:-.01em; }
+  .kpi .s { color:var(--muted); font-size:12px; margin-top:2px; }
+  section { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; margin-bottom:18px; }
+  section h2 { margin:0 0 2px; font-size:16px; }
+  section .sub { color:var(--muted); font-size:13px; margin-bottom:10px; }
+  .bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+  input[type=search] { padding:7px 10px; border:1px solid var(--line); border-radius:8px; min-width:240px; font:inherit; }
+  button { padding:7px 12px; border:1px solid var(--line); background:#fff; border-radius:8px; cursor:pointer; font:inherit; }
+  button.on { background:var(--redbg); border-color:#f4b4ad; color:var(--red); }
+  .pill { display:inline-block; padding:1px 9px; border-radius:999px; font-size:12px; font-weight:600; line-height:20px; }
+  .pill.green { background:var(--greenbg); color:var(--green); }
+  .pill.red { background:var(--redbg); color:var(--red); }
+  .pill.amber { background:var(--amberbg); color:var(--amber); }
+  .pill.grey { background:var(--greybg); color:var(--grey); }
+  .pill.blue { background:var(--bluebg); color:var(--blue); }
+  .ag-theme-quartz { --ag-font-size:13px; }
+  .ag-row.sel { background:#eef3ff !important; }
+  #attHint { color:var(--muted); font-size:13px; padding:6px 0; }
+  footer { color:var(--muted); font-size:12px; }
+  .live-note { font-size:12px; color:var(--muted); margin-left:auto; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Recoup</h1>
+    <span class="tag">The AI proposes, the rules decide, every action is audited.</span>
+  </header>
+
+  <div class="banner"><b>Simulated data.</b> The KPIs and both grids below come from a simulated batch: failures are injected and outcomes are sampled, not real money. The panel at the bottom is separate and shows only real PayPal sandbox webhook events.</div>
+  <div class="err" id="err"></div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section>
+    <h2>Recovery ledger <span style="font-weight:400;color:var(--muted)">(one row per failed payment, final outcome)</span></h2>
+    <div class="sub">Click a record to see every attempt the agent made and the guardrail checks behind each decision.</div>
+    <div class="bar">
+      <input type="search" id="q" placeholder="Search records, customers, reasons...">
+      <button id="btnBlocked" title="Records where a guardrail stopped or changed the agent's first choice">Only records with a blocked guardrail</button>
+      <span id="count" class="sub" style="margin:0"></span>
+    </div>
+    <div id="recGrid" class="ag-theme-quartz" style="height:430px"></div>
+  </section>
+
+  <section>
+    <h2>Decision audit trail <span id="attTitle" style="font-weight:400;color:var(--muted)"></span></h2>
+    <div class="sub">Each attempt: what the agent chose and why, and the six deterministic guardrail checks that had to pass before anything ran.</div>
+    <div id="attHint">Select a record above.</div>
+    <div id="attGrid" class="ag-theme-quartz" style="height:240px;display:none"></div>
+  </section>
+
+  <section>
+    <h2>Live PayPal sandbox events</h2>
+    <div class="sub">Real, signature-verified webhook events received by this server. Empty until a sandbox buyer approves an order. <span id="liveStatus"></span></div>
+    <div id="evGrid" class="ag-theme-quartz" style="height:230px"></div>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/ag-grid-community@32/dist/ag-grid-community.min.js"></script>
+<script>
+const CHECKS = ['attempt_cap','cooldown','contact_cap','amount_gate','mandate_active','pre_debit_notice'];
+const CHECK_LABEL = {attempt_cap:'Attempt cap',cooldown:'Cooldown',contact_cap:'Contact cap',amount_gate:'Amount gate',mandate_active:'Mandate',pre_debit_notice:'Customer notice'};
+const isBlocked = r => Object.values(r.guardrail_checks || {}).some(v => v !== 'pass');
+const usd = c => (c === null || c === undefined || c === '') ? '' :
+  new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(c/100);
+
+let ledger = null, failedIds = new Set(), onlyBlocked = false, selectedId = null;
+let recApi, attApi, evApi;
+
+function pill(text, cls) {
+  const s = document.createElement('span');
+  s.className = 'pill ' + cls;
+  s.textContent = text;
+  return s;
+}
+const STATUS_CLS = {recovered:'green', escalated:'amber', abandoned:'grey', open:'blue', awaiting:'blue'};
+const statusPill = v => v ? pill(v, STATUS_CLS[v] || 'grey') : '';
+const guardPill = v => !v ? '' : (v === 'pass' ? pill('pass','green') : pill(String(v),'red'));
+
+function showError(msg) { const e = document.getElementById('err'); e.textContent = msg; e.style.display = 'block'; }
+
+function kpi(label, value, sub) {
+  const d = document.createElement('div');
+  d.className = 'kpi';
+  d.innerHTML = '<div class="l"></div><div class="v"></div><div class="s"></div>';
+  d.children[0].textContent = label; d.children[1].textContent = value; d.children[2].textContent = sub || '';
+  return d;
+}
+
+function renderKpis() {
+  const s = ledger.summary || {}, rows = ledger.rows || [];
+  const atRisk = s.total_at_risk_cents || 0, rec = s.recovered_cents || 0;
+  const blockedRows = rows.filter(r => isBlocked(r)).length;
+  const k = document.getElementById('kpis');
+  k.replaceChildren(
+    kpi('At risk', usd(atRisk), (s.n_records||0) + ' failed payments'),
+    kpi('Recovered', usd(rec), atRisk ? (100*rec/atRisk).toFixed(1) + '% of at-risk (simulated)' : ''),
+    kpi('Records recovered', s.recovered_count ?? '', 'closed with money back'),
+    kpi('Escalated to a human', s.escalated_count ?? '', 'each with a logged reason'),
+    kpi('Abandoned', s.abandoned_count ?? '', 'stopped cleanly, not worth pursuing'),
+    kpi('Guardrail-blocked attempts', blockedRows, 'of ' + (s.attempts ?? rows.length) + ' attempts')
+  );
+}
+
+function recColumns() {
+  return [
+    {field:'record_id', headerName:'Record', width:105, pinned:'left'},
+    {field:'customer_id', headerName:'Customer', width:110},
+    {field:'amount_cents', headerName:'Amount', width:115, type:'rightAligned', filter:false, sort:'desc', valueFormatter:p=>usd(p.value)},
+    {field:'failure_class', headerName:'Failure class', width:150},
+    {field:'error_reason', headerName:'Failure reason', width:190},
+    {field:'method', width:150},
+    {field:'final_status', headerName:'Final status', width:125, cellRenderer:p=>statusPill(p.value)},
+    {field:'recovered_cents', headerName:'Recovered', width:115, type:'rightAligned', filter:false, valueFormatter:p=>usd(p.value)},
+    {field:'attempts', headerName:'Attempts', width:95, type:'rightAligned', filter:false},
+    {field:'async_recovered_cents', headerName:'Settled async', width:125, type:'rightAligned', filter:false, valueFormatter:p=>p.value ? usd(p.value) : ''},
+    {headerName:'Gate', width:100, valueGetter:p=>p.data && failedIds.has(p.data.record_id) ? 'blocked' : '', cellRenderer:p=>p.value ? pill(p.value,'red') : ''},
+    {field:'last_action', headerName:'Last action', width:170},
+    {field:'last_rationale', headerName:'Rationale', flex:1, minWidth:340, tooltipField:'last_rationale'}
+  ];
+}
+
+function attColumns() {
+  const cols = [
+    {field:'attempt_number', headerName:'#', width:60},
+    {field:'timestamp', headerName:'Time', width:160},
+    {field:'chosen_action', headerName:'Action chosen', width:165},
+    {field:'outcome', headerName:'Outcome', width:115, cellRenderer:p=>statusPill(p.value)}
+  ];
+  CHECKS.forEach(k => cols.push({field:'guardrail_checks.'+k, headerName:CHECK_LABEL[k], width:k==='pre_debit_notice'?150:125, cellRenderer:p=>guardPill(p.value)}));
+  cols.push(
+    {field:'model_score', headerName:'Model p', width:90, filter:false},
+    {field:'amount_recovered_cents', headerName:'Recovered', width:110, type:'rightAligned', filter:false, valueFormatter:p=>usd(p.value)},
+    {field:'execution_mode', headerName:'Mode', width:100},
+    {field:'rationale', headerName:'Rationale', flex:1, minWidth:340, tooltipField:'rationale'},
+    {field:'narration', headerName:'Narration', minWidth:300, tooltipField:'narration'}
+  );
+  return cols;
+}
+
+function pick(e, ...paths) {
+  for (const p of paths) {
+    let v = e;
+    for (const part of p.split('.')) v = (v && typeof v === 'object') ? v[part] : undefined;
+    if (v !== undefined && v !== null && v !== '') return v;
+  }
+  return '';
+}
+function evColumns() {
+  return [
+    {headerName:'Received', width:170, valueGetter:p=>pick(p.data,'received_at','create_time','time','timestamp')},
+    {headerName:'Event type', width:230, valueGetter:p=>pick(p.data,'event_type','type')},
+    {headerName:'Event id', width:210, valueGetter:p=>pick(p.data,'id','event_id')},
+    {headerName:'Order id', width:190, valueGetter:p=>pick(p.data,'order_id','resource.supplementary_data.related_ids.order_id','resource.id')},
+    {headerName:'Status', width:140, valueGetter:p=>pick(p.data,'resource.status','status','summary')},
+    {headerName:'Raw', flex:1, minWidth:300, valueGetter:p=>JSON.stringify(p.data), tooltipValueGetter:p=>JSON.stringify(p.data, null, 1)}
+  ];
+}
+
+function showAttempts(recId) {
+  selectedId = recId;
+  recApi.redrawRows();
+  const rows = (ledger.rows || []).filter(r => r.record_id === recId)
+    .sort((a,b) => (a.attempt_number||0) - (b.attempt_number||0));
+  const rec = (ledger.records || []).find(r => r.record_id === recId) || {};
+  document.getElementById('attTitle').textContent =
+    ' - ' + recId + (rec.customer_id ? ' / ' + rec.customer_id : '') + (rec.final_status ? ' / ' + rec.final_status : '');
+  const hint = document.getElementById('attHint'), grid = document.getElementById('attGrid');
+  if (!rows.length) { hint.style.display = 'block'; hint.textContent = 'No attempt rows for ' + recId + '.'; grid.style.display = 'none'; return; }
+  hint.style.display = 'none'; grid.style.display = 'block';
+  attApi.setGridOption('rowData', rows);
+}
+
+async function loadLedger() {
+  try {
+    const res = await fetch('/api/ledger');
+    if (!res.ok) throw new Error('GET /api/ledger returned ' + res.status);
+    ledger = await res.json();
+    if (!ledger.records || !ledger.rows) throw new Error('Ledger is missing "records" or "rows". Rebuild it with python -m scripts.build_ledger.');
+  } catch (e) { showError('Could not load the ledger: ' + e.message); return; }
+
+  failedIds = new Set((ledger.rows || [])
+    .filter(r => isBlocked(r))
+    .map(r => r.record_id));
+  renderKpis();
+  recApi.setGridOption('rowData', ledger.records);
+  document.getElementById('count').textContent = ledger.records.length + ' records';
+  document.getElementById('foot').textContent =
+    'Source: ' + (ledger.source || 'simulated') + ' | policy: ' + (ledger.policy || '') + ' | generated ' + (ledger.generated_at || '');
+}
+
+async function pollEvents() {
+  const st = document.getElementById('liveStatus');
+  try {
+    const res = await fetch('/api/webhook-events');
+    if (!res.ok) throw new Error(res.status);
+    const d = await res.json();
+    const list = Array.isArray(d) ? d : (d.events || d.items || []);
+    evApi.setGridOption('rowData', list);
+    st.textContent = list.length + ' event(s), checked ' + new Date().toLocaleTimeString();
+  } catch (e) { st.textContent = 'Could not reach /api/webhook-events (' + e.message + ')'; }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const base = {sortable:true, resizable:true, filter:true};
+  recApi = agGrid.createGrid(document.getElementById('recGrid'), {
+    columnDefs: recColumns(), defaultColDef: base, rowData: [],
+    getRowId: p => p.data.record_id,
+    rowClassRules: {sel: p => p.data && p.data.record_id === selectedId},
+    isExternalFilterPresent: () => onlyBlocked,
+    doesExternalFilterPass: node => failedIds.has(node.data.record_id),
+    onRowClicked: e => showAttempts(e.data.record_id),
+    onModelUpdated: () => { if (ledger) document.getElementById('count').textContent = recApi.getDisplayedRowCount() + ' of ' + ledger.records.length + ' records'; }
+  });
+  attApi = agGrid.createGrid(document.getElementById('attGrid'), {columnDefs: attColumns(), defaultColDef: base, rowData: []});
+  evApi = agGrid.createGrid(document.getElementById('evGrid'), {
+    columnDefs: evColumns(), defaultColDef: base, rowData: [], overlayNoRowsTemplate: '<span>No live events yet.</span>'
+  });
+  document.getElementById('q').addEventListener('input', e => recApi.setGridOption('quickFilterText', e.target.value));
+  document.getElementById('btnBlocked').addEventListener('click', e => {
+    onlyBlocked = !onlyBlocked;
+    e.currentTarget.classList.toggle('on', onlyBlocked);
+    recApi.onFilterChanged();
+  });
+  loadLedger();
+  pollEvents();
+  setInterval(pollEvents, 5000);
+});
+</script>
+</body>
+</html>

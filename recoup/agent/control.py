@@ -329,18 +329,18 @@ def check_guardrails(
         checks["mandate_active"] = "fail"
         return _blocked(
             checks,
-            f"mandate is {status}: a debit needs re-consent, not a retry",
+            f"subscription is {status}: a charge needs the customer's renewed approval, not a retry",
         )
     checks["mandate_active"] = "pass"
 
-    # 6. E-mandate pre-debit notification (RBI): a debit requires notice.
+    # 6. Customer notice (internal policy): a recurring charge on a stored payment method requires prior notice.
     if action.touches_instrument and record.get("is_mandate_debit") and not record.get(
         "pre_debit_notified", False
     ):
         checks["pre_debit_notice"] = "fail"
         return _blocked(
             checks,
-            "e-mandate debit without the required pre-debit notification",
+            "recurring charge on a stored payment method without prior customer notice",
         )
     checks["pre_debit_notice"] = "pass"
 

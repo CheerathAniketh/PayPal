@@ -25,3 +25,15 @@ app = create_app(
 )
 app.state.resolutions = resolutions
 add_ledger_routes(app, LEDGER_PATH)
+
+
+# --- dashboard ---
+from pathlib import Path as _Path
+from fastapi.responses import FileResponse as _FileResponse
+
+_WEB_DIR = _Path(__file__).resolve().parents[2] / "web"
+
+
+@app.get("/", include_in_schema=False)
+def dashboard():
+    return _FileResponse(_WEB_DIR / "index.html")

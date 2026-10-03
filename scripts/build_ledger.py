@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import dataclasses
 import json
+import os
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -23,6 +24,16 @@ OUT = Path(__file__).resolve().parent.parent / "data" / "ledger.json"
 
 def main() -> None:
     records, customers = load_frozen()
+    narrator = None
+    if os.getenv("RECOUP_NARRATOR", "").lower() == "gemini":
+        from recoup.agent.gemini_narrator import GeminiNarrator
+        from recoup.agent.runtime import configure
+
+        narrator = GeminiNarrator.from_env()
+        if narrator is None:
+            print("RECOUP_NARRATOR=gemini but GEMINI_API_KEY is not set; using template narration")
+        else:
+            configure(narrator=narrator)
     customers = hydrate_customers(customers)
     latent = load_latent()
     summary, scheduler, audit = _run_once(
@@ -104,6 +115,8 @@ def main() -> None:
     print(f"wrote {OUT} | {len(rows)} rows | {blocked} rows with a failed guardrail")
     print("outcomes:", dict(Counter(r.get("outcome") for r in rows)))
     print("row keys:", sorted(rows[0].keys()))
+    if narrator is not None:
+        print("narrator:", narrator.stats())
     print("sample row:", json.dumps(rows[0], default=str))
 
 
