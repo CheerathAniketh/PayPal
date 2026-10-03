@@ -26,7 +26,7 @@ from config.taxonomy import (
     PaymentMethod,
 )
 from recoup.models import Customer, FailedRecord, LatentTruth
-from recoup.money import rupees_to_cents
+from recoup.money import dollars_to_cents
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 FROZEN_PATH = DATA_DIR / "batch_frozen.json"
@@ -86,16 +86,18 @@ SUBSCRIPTION_STATUSES = ("active", "paused", "halted", "cancelled")
 # happens on a mandate rail.
 CLASS_METHODS: Dict[FailureClass, Tuple[PaymentMethod, ...]] = {
     FailureClass.INSUFFICIENT_FUNDS: (
-        PaymentMethod.CARD, PaymentMethod.NETBANKING,
-        PaymentMethod.UPI, PaymentMethod.EMANDATE,
+        PaymentMethod.CARD, PaymentMethod.PAYPAL_BALANCE,
+        PaymentMethod.BANK_ACCOUNT,
     ),
     FailureClass.BANK_DOWNTIME: (
-        PaymentMethod.CARD, PaymentMethod.NETBANKING,
-        PaymentMethod.UPI, PaymentMethod.EMANDATE,
+        PaymentMethod.CARD, PaymentMethod.PAYPAL_BALANCE,
+        PaymentMethod.BANK_ACCOUNT,
     ),
     FailureClass.CARD_EXPIRED: (PaymentMethod.CARD,),
-    FailureClass.MANDATE_BROKEN: (PaymentMethod.EMANDATE, PaymentMethod.UPI),
-    FailureClass.DO_NOT_HONOUR: (PaymentMethod.CARD, PaymentMethod.UPI),
+    FailureClass.MANDATE_BROKEN: (
+        PaymentMethod.BANK_ACCOUNT, PaymentMethod.PAYPAL_BALANCE,
+    ),
+    FailureClass.DO_NOT_HONOUR: (PaymentMethod.CARD, PaymentMethod.PAYPAL_BALANCE),
 }
 
 
@@ -150,7 +152,7 @@ def generate(config: GeneratorConfig = GeneratorConfig()) -> Batch:
     for i in range(config.n_customers):
         cid = f"cust_{i:04d}"
         tenure = int(np.clip(rng.lognormal(mean=5.55, sigma=0.85), 14, 2200))
-        avg_payment = rupees_to_cents(
+        avg_payment = dollars_to_cents(
             float(np.clip(rng.lognormal(mean=6.2, sigma=0.5), 90, 12000))
         )
         engagement = _beta_around(
@@ -215,12 +217,12 @@ def generate(config: GeneratorConfig = GeneratorConfig()) -> Batch:
             if klass is FailureClass.MANDATE_BROKEN
             else config.amount_mu
         )
-        amount = rupees_to_cents(
+        amount = dollars_to_cents(
             float(np.clip(rng.lognormal(mean=mu, sigma=config.amount_sigma), 49, 40000))
         )
 
-        is_mandate_debit = method is PaymentMethod.EMANDATE or (
-            method is PaymentMethod.UPI and customer.is_subscriber
+        is_mandate_debit = method is PaymentMethod.BANK_ACCOUNT or (
+            method is PaymentMethod.PAYPAL_BALANCE and customer.is_subscriber
         )
         if klass is FailureClass.MANDATE_BROKEN:
             status = str(

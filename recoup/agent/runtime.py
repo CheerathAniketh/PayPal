@@ -25,7 +25,7 @@ from recoup.clock import SimulatedClock
 from recoup.environment import RecoveryEnvironment
 from recoup.executor import Executor as PaymentsExecutor
 from recoup.models import ExecutionMode, Outcome
-from recoup.money import format_inr, split_cents
+from recoup.money import format_usd, split_cents
 
 
 # --------------------------------------------------------------------------
@@ -167,11 +167,11 @@ class TemplateNarrator:
             execution = state.get("execution", {})
             guardrail = state.get("guardrail", {})
             status = state.get("terminal_status", "?")
-            amount = format_inr(int(record.get("amount_cents", 0)))
+            amount = format_usd(int(record.get("amount_cents", 0)))
             who = record.get("customer_id", "?")
 
             if status == "recovered":
-                got = format_inr(int(execution.get("amount_recovered_cents", 0)))
+                got = format_usd(int(execution.get("amount_recovered_cents", 0)))
                 return (
                     f"Recovered {got} of {amount} from {who} via "
                     f"{decision.get('chosen', '?')}."
@@ -185,7 +185,7 @@ class TemplateNarrator:
                 got = int(execution.get("amount_recovered_cents", 0))
                 if got > 0:
                     return (
-                        f"Partially recovered {format_inr(got)} of {amount} from "
+                        f"Partially recovered {format_usd(got)} of {amount} from "
                         f"{who}; residual remains at risk."
                     )
                 return (

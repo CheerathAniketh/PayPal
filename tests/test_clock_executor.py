@@ -140,7 +140,7 @@ def test_partial_debit_recovers_only_part_of_the_amount():
     """The headline is not inflated.
 
     A ``retry_smaller_amount`` that succeeds recovers half, not all. Counting a
-    partial as a full recovery would inflate the headline. Rs 736 -> Rs 368.
+    partial as a full recovery would inflate the headline. $736 -> $368.
     """
     ex = _executor()
     record = make_record(amount_cents=73_600)
@@ -206,10 +206,8 @@ def test_api_failure_is_not_recovery_failure():
     decides whether the money came back.
     """
     class BoomClient:
-        class order:
-            @staticmethod
-            def create(_payload):
-                raise RuntimeError("network timeout")
+        def create_order(self, **_kwargs):
+            raise RuntimeError("network timeout")
 
     ex = Executor(RecoveryEnvironment(), mode=ExecutionMode.TEST_MODE,
                   client=BoomClient())

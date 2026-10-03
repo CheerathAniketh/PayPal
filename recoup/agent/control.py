@@ -48,7 +48,7 @@ class Policy:
     min_cooldown_hours: float = 24.0
     max_contacts_per_window: int = 3
     contact_window_hours: float = 720.0            # 30 days
-    amount_auto_cap_cents: int = 500_000           # Rs 5,000: above -> human gate
+    amount_auto_cap_cents: int = 500_000           # $5,000: above -> human gate
 
     # Per-class attempt caps come from the taxonomy; mirrored here for clarity.
     max_attempts: Dict[FailureClass, int] = field(

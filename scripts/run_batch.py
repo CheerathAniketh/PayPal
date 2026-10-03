@@ -39,7 +39,7 @@ from recoup.agent.scheduler import BatchScheduler, RunSummary, SchedulerConfig
 from recoup.environment import RecoveryEnvironment
 from recoup.generator import BATCH_ANCHOR, generate, hydrate_customers, load_frozen, load_latent
 from recoup.models import FailedRecord
-from recoup.money import format_inr
+from recoup.money import format_usd
 
 MODEL_PATH = Path(__file__).resolve().parent.parent / "data" / "propensity_model.joblib"
 START = datetime(2026, 1, 16, 9)
@@ -132,21 +132,21 @@ def _compliance_violations(audit_rows: List[Dict[str, Any]]) -> int:
 
 def _print_scorecard(summary: RunSummary, scheduler, latent, audit) -> None:
     print(f"\n{DASH}\nRECOVERY")
-    print(f"  at risk        {format_inr(summary.total_at_risk_cents)}")
-    print(f"  recovered      {format_inr(summary.recovered_cents)}  "
+    print(f"  at risk        {format_usd(summary.total_at_risk_cents)}")
+    print(f"  recovered      {format_usd(summary.recovered_cents)}  "
           f"({summary.recovery_rate:.1%})")
     print(f"  recovered      {summary.recovered_count} records | "
           f"escalated {summary.escalated_count} | abandoned {summary.abandoned_count} | "
           f"awaiting {summary.in_progress_count}")
     print(f"  work done      {summary.attempts} attempts | "
           f"{summary.contacts_made} customer contacts | "
-          f"budget {format_inr(summary.budget_spent_cents)}")
+          f"budget {format_usd(summary.budget_spent_cents)}")
 
     print(f"\n{DASH}\nRECOVERY BY FAILURE CLASS")
     print(f"  {'class':<20} {'recovered / at risk':>26}   {'rate':>6}   {'n':>7}")
     for name, at_risk, recovered, n, n_rec in _by_class(scheduler, latent):
         rate = recovered / at_risk if at_risk else 0.0
-        pair = f"{format_inr(recovered)} / {format_inr(at_risk)}"
+        pair = f"{format_usd(recovered)} / {format_usd(at_risk)}"
         print(f"  {name:<20} {pair:>26}   {rate:6.1%}   {n_rec:>3}/{n:<3}")
 
     print(f"\n{DASH}\nDISCIPLINE")
@@ -280,14 +280,14 @@ def main() -> None:
 
     # ---- headline comparison ----
     print("\n" + BAR + "\nHEADLINE — realized recovery, rules vs model\n" + BAR)
-    print(f"  rules   {format_inr(rules_summary.recovered_cents):>14}  "
+    print(f"  rules   {format_usd(rules_summary.recovered_cents):>14}  "
           f"{rules_summary.recovery_rate:6.1%}")
     if model_summary is not None:
         delta = model_summary.recovered_cents - rules_summary.recovered_cents
         sign = "+" if delta >= 0 else "-"
-        print(f"  model   {format_inr(model_summary.recovered_cents):>14}  "
+        print(f"  model   {format_usd(model_summary.recovered_cents):>14}  "
               f"{model_summary.recovery_rate:6.1%}   "
-              f"({sign}{format_inr(abs(delta))} vs rules)")
+              f"({sign}{format_usd(abs(delta))} vs rules)")
         print(f"\n  Both runs share the same deterministic environment draws; the")
         print(f"  only difference is which interventions the policy chose. The model")
         print(f"  figure is CROSS-FITTED: each record is scored by a model trained")

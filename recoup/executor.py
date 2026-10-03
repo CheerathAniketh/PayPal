@@ -84,7 +84,7 @@ TEST_MODE_SUPPORT: Mapping[Intervention, TestModeSupport] = {
     Intervention.RE_AUTH_MANDATE: TestModeSupport(
         False,
         mock_reason=(
-            "re-approval means the buyer completing PayPal's payer-action "
+            "re-approval requires real buyer authentication: the buyer completing PayPal's payer-action "
             "flow in a browser; the sandbox cannot do that unattended"
         ),
     ),

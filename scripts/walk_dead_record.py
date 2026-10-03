@@ -27,7 +27,7 @@ from recoup.agent.graph import graph
 from recoup.agent.runtime import DemoAuditLog, DemoExecutor, configure
 from recoup.environment import RecoveryEnvironment
 from recoup.generator import hydrate_customers, load_frozen, load_latent
-from recoup.money import format_inr
+from recoup.money import format_usd
 
 TERMINAL = {"escalated", "abandoned", "recovered"}
 MAX_ATTEMPTS = 5   # safety stop; class-5 escalates at attempt 2 in practice
@@ -82,7 +82,7 @@ def _print_attempt(n: int, out: Dict[str, Any]) -> None:
 
     # execute
     if ex:
-        got = format_inr(int(ex.get("amount_recovered_cents", 0)))
+        got = format_usd(int(ex.get("amount_recovered_cents", 0)))
         print(f"  execute    outcome={ex.get('outcome','?'):<12} recovered={got:>10}  "
               f"api_called={ex.get('api_called', False)}  "
               f"async={ex.get('settles_async', False)}")
@@ -115,7 +115,7 @@ def main() -> None:
     print("GRACEFUL FAILURE -- one truly-dead do-not-honour record, end to end")
     print(BAR)
     print(f"record     {dead.record_id}  customer {dead.customer_id}")
-    print(f"amount     {format_inr(dead.amount_cents)}   method {dead.method.value}")
+    print(f"amount     {format_usd(dead.amount_cents)}   method {dead.method.value}")
     print(f"reason     {dead.error_reason}  -> class do_not_honour")
     print("truth      seeded truly-dead: recovery probability ~0 whatever we try")
     print("policy     do_not_honour attempt cap = 1 (one controlled retry, then stop)")
@@ -157,7 +157,7 @@ def _readable(row: Dict[str, Any]) -> Dict[str, Any]:
     """A trimmed, human-readable view of an audit row for on-screen reading."""
     r = dict(row)
     if isinstance(r.get("amount_recovered_cents"), int):
-        r["amount_recovered"] = format_inr(r["amount_recovered_cents"])
+        r["amount_recovered"] = format_usd(r["amount_recovered_cents"])
     keep = [
         "record_id", "customer_id", "attempt_number", "chosen_action",
         "outcome", "guardrail_checks", "model_score", "amount_recovered",

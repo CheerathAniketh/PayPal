@@ -54,7 +54,7 @@ def staged_key(run_id: str, record_id: str, attempt_number: int, stage: str) -> 
     One attempt legitimately emits more than one event over time (``pending`` at
     API return, then ``resolved`` at settlement).  An attempt-level unique index
     would drop the resolution -- every pending charge stuck forever, recovered
-    rupees silently undercounting.  Stage-in-the-key is a one-field extension of
+    dollars silently undercounting.  Stage-in-the-key is a one-field extension of
     the scheme above and needs no new schema.
     """
     return f"{attempt_key(run_id, record_id, attempt_number)}:{stage}"

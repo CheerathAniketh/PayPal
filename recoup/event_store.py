@@ -110,7 +110,7 @@ class EventStore:
             self.conn.commit()
             return True
         except sqlite3.IntegrityError:
-            # Exact duplicate key -> the recovered-rupees headline cannot
+            # Exact duplicate key -> the recovered-dollars headline cannot
             # double-count on a retried webhook delivery.
             self.conn.rollback()
             return False

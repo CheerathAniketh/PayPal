@@ -51,7 +51,7 @@ from recoup.environment import RecoveryEnvironment
 from recoup.generator import BATCH_ANCHOR, generate
 from recoup.ml.dataset import attempt_time, build_dataset
 from recoup.ml.model import train_model
-from recoup.money import format_inr
+from recoup.money import format_usd
 from sklearn.model_selection import GroupKFold
 
 CALIBRATION = "platt"
@@ -143,7 +143,7 @@ def main() -> None:
         ("oracle", v_oracle),
     ]:
         pct = v / v_oracle if v_oracle else 0.0
-        print(f"  {name:11s} {format_inr(v):>14s}   {pct:6.1%} of oracle")
+        print(f"  {name:11s} {format_usd(v):>14s}   {pct:6.1%} of oracle")
     print("-" * 70)
     if v_oracle > v_rules:
         closed = (v_model - v_rules) / (v_oracle - v_rules)

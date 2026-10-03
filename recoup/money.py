@@ -16,31 +16,31 @@ from __future__ import annotations
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Iterable, Union
 
-Rupees = Union[int, float, str, Decimal]
+Dollars = Union[int, float, str, Decimal]
 
 
-def rupees_to_cents(rupees: Rupees) -> int:
-    """Convert rupees to integer cents.  Use at the INGEST BOUNDARY only.
+def dollars_to_cents(dollars: Dollars) -> int:
+    """Convert dollars to integer cents.  Use at the INGEST BOUNDARY only.
 
     Goes via :class:`~decimal.Decimal` so that ``"736.005"`` rounds the way a
     human expects rather than the way binary floating point happens to.
     """
-    quantised = Decimal(str(rupees)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    quantised = Decimal(str(dollars)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     return int(quantised * 100)
 
 
-def cents_to_rupees(cents: int) -> float:
-    """Convert cents to rupees.  DISPLAY ONLY -- never feed this back into a
+def cents_to_dollars(cents: int) -> float:
+    """Convert cents to dollars.  DISPLAY ONLY -- never feed this back into a
     calculation, or you have reintroduced the float you just removed."""
     _assert_cents(cents)
     return cents / 100.0
 
 
-def format_inr(cents: int) -> str:
-    """Render cents for humans: ``73600`` -> ``'Rs 736.00'``."""
+def format_usd(cents: int) -> str:
+    """Render cents for humans: ``73600`` -> ``'$736.00'``."""
     _assert_cents(cents)
     sign = "-" if cents < 0 else ""
-    return f"{sign}Rs {abs(cents) / 100.0:,.2f}"
+    return f"{sign}${abs(cents) / 100.0:,.2f}"
 
 
 def split_cents(cents: int, fraction: float) -> int:
@@ -48,7 +48,7 @@ def split_cents(cents: int, fraction: float) -> int:
 
     The rounding direction is deliberate.  When a direction must be chosen,
     choose the one that cannot inflate the headline recovery figure: a partial
-    debit of Rs 736.005 is recorded as Rs 736.00, never Rs 736.01.
+    debit of $736.005 is recorded as $736.00, never $736.01.
     """
     _assert_cents(cents)
     if not 0.0 <= fraction <= 1.0:

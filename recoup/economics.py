@@ -14,8 +14,8 @@ The threshold is derived, not chosen.  Setting ``net_ev = 0`` and solving:
 
     p* = contact_cost / (amount - fee)
 
-So a Rs 10,000 charge justifies an attempt at a far lower probability than a
-Rs 200 charge.  That amount-sensitivity is the entire reason for moving off
+So a $10,000 charge justifies an attempt at a far lower probability than a
+$200 charge.  That amount-sensitivity is the entire reason for moving off
 gross EV.
 
 Anchoring the cost without inventing a number
@@ -35,7 +35,7 @@ from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
 from config.taxonomy import CANDIDATES, FailureClass, Intervention, spec
-from recoup.money import rupees_to_cents
+from recoup.money import dollars_to_cents
 
 
 @dataclass(frozen=True)
@@ -43,14 +43,14 @@ class EconomicPolicy:
     """Every economic knob, in one auditable place."""
 
     # Gateway fee: a hard channel cost, charged only on a successful capture.
-    # Razorpay's standard MDR is ~2%; a per-txn floor keeps tiny debits honest.
-    gateway_fee_bps: int = 200                # 2.00%
-    gateway_fee_floor_cents: int = 200        # Rs 2 minimum
+    # PayPal Checkout, US merchant, domestic USD: 3.49% + $0.49 per transaction.
+    gateway_fee_bps: int = 349                # 3.49%
+    gateway_fee_fixed_cents: int = 49         # $0.49 per transaction
 
-    # The policy anchor. "At a reference charge of Rs 1,000, do not bother
+    # The policy anchor. "At a reference charge of $1,000, do not bother
     # contacting a customer unless the success probability is at least this."
     p_star_target: float = 0.20
-    reference_amount_cents: int = field(default_factory=lambda: rupees_to_cents(1000))
+    reference_amount_cents: int = field(default_factory=lambda: dollars_to_cents(1000))
 
     # Linear cost escalation (option 2 of the three considered). One clean knob
     # `k`: the nth customer-facing contact costs base * (1 + k*n). Makes the
@@ -68,7 +68,7 @@ class EconomicPolicy:
     def gateway_fee(self, amount_cents: int) -> int:
         """The fee charged on a successful capture of ``amount_cents``."""
         pct = (amount_cents * self.gateway_fee_bps) // 10_000
-        return max(pct, self.gateway_fee_floor_cents)
+        return pct + self.gateway_fee_fixed_cents
 
     def base_contact_cost_cents(self) -> int:
         """Back-solve the base contact cost from the policy anchor.

@@ -30,7 +30,7 @@ from recoup.agent.scheduler import BatchScheduler, RunSummary, SchedulerConfig
 from recoup.environment import RecoveryEnvironment
 from recoup.generator import FROZEN_PATH, hydrate_customers, load_frozen, load_latent
 from recoup.models import FailedRecord
-from recoup.money import format_inr
+from recoup.money import format_usd
 
 OUT_PATH = Path(__file__).resolve().parent.parent / "report.html"
 START = datetime(2026, 1, 16, 9, 0, 0)
@@ -188,7 +188,7 @@ def ledger_rows(scheduler: BatchScheduler, latent) -> List[Dict[str, Any]]:
         ):
             if st.status == "recovered":
                 derived = (
-                    f"final: recovered {format_inr(st.recovered_cents)} "
+                    f"final: recovered {format_usd(st.recovered_cents)} "
                     "(async settlement -- customer acted before the response window)"
                 )
             elif st.status == "escalated":
@@ -254,9 +254,9 @@ def _ledger_row_html(r: Dict[str, Any]) -> str:
       <td><span class="chev">▸</span><span class="mono">{r['record_id']}</span></td>
       <td class="mono muted">{r['customer_id']}</td>
       <td>{html.escape(r['cause'])}</td>
-      <td class="num tabular">{format_inr(r['amount'])}</td>
+      <td class="num tabular">{format_usd(r['amount'])}</td>
       <td class="num tabular">{r['attempts']}</td>
-      <td class="num tabular">{format_inr(r['recovered'])}</td>
+      <td class="num tabular">{format_usd(r['recovered'])}</td>
       <td><span class="badge {r['status_class']}">{html.escape(r['status_label'])}</span></td>
     </tr>
     <tr class="detail-row" hidden>
@@ -269,7 +269,7 @@ def render(summary, recon, disc, classes, ledger, meta) -> str:
         f"""
         <tr>
           <td>{html.escape(c['label'])}</td>
-          <td class="num tabular">{format_inr(c['recovered'])} / {format_inr(c['at_risk'])}</td>
+          <td class="num tabular">{format_usd(c['recovered'])} / {format_usd(c['at_risk'])}</td>
           <td class="num tabular">{c['rate']:.1%}</td>
           <td class="num tabular">{c['n_rec']}/{c['n']}</td>
         </tr>"""
@@ -469,22 +469,22 @@ td.num, th.num {{ text-align: right; }}
   </header>
 
   <div class="hero">
-    <div class="total tabular">{format_inr(recon['recovered'])}</div>
-    <div class="of">recovered of {format_inr(recon['at_risk'])} at risk &middot;
+    <div class="total tabular">{format_usd(recon['recovered'])}</div>
+    <div class="of">recovered of {format_usd(recon['at_risk'])} at risk &middot;
       <span class="rate">{recon['rate']:.1%}</span></div>
   </div>
   <div class="reconcile">
     <div class="cell">
       <div class="label">Recovered</div>
-      <div class="value tabular">{format_inr(recon['recovered'])}</div>
+      <div class="value tabular">{format_usd(recon['recovered'])}</div>
     </div>
     <div class="cell">
       <div class="label">Not recovered</div>
-      <div class="value tabular">{format_inr(recon['not_recovered'])}</div>
+      <div class="value tabular">{format_usd(recon['not_recovered'])}</div>
     </div>
     <div class="cell">
       <div class="label">At risk</div>
-      <div class="value tabular">{format_inr(recon['at_risk'])}</div>
+      <div class="value tabular">{format_usd(recon['at_risk'])}</div>
     </div>
   </div>
   <div class="tieout{tie_class}">&#10003; {html.escape(tie_text)}</div>
@@ -615,7 +615,7 @@ def main() -> None:
     OUT_PATH.write_text(page, encoding="utf-8")
 
     print(f"wrote {OUT_PATH}  ({len(page):,} bytes)")
-    print(f"  recovered {format_inr(recon['recovered'])} of {format_inr(recon['at_risk'])}  "
+    print(f"  recovered {format_usd(recon['recovered'])} of {format_usd(recon['at_risk'])}  "
           f"({recon['rate']:.1%})  ties_out={recon['ties']}")
     print(f"  {len(ledger)} ledger rows  |  violations {disc['violations']}  |  "
           f"dead stopped {disc['dead_stopped']}/{disc['dead_total']}")

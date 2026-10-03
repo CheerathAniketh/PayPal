@@ -13,7 +13,7 @@ Why a staged key
 ----------------
 An attempt legitimately emits more than one event over time: ``pending`` at API
 return, then ``resolved`` at settlement.  An attempt-level unique index would
-drop the resolution -- every pending charge stuck forever, recovered rupees
+drop the resolution -- every pending charge stuck forever, recovered dollars
 silently undercounting.  Stage-in-the-key fixes it with one extra field.
 
 The monotonic fold invariant

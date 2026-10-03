@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from recoup.db import Store
 from recoup.ingest import ingest
-from recoup.money import format_inr
+from recoup.money import format_usd
 
 
 def main() -> None:
@@ -18,7 +18,7 @@ def main() -> None:
     print("-" * 50)
     print(f"records          {report.n_records}")
     print(f"customers        {report.n_customers}")
-    print(f"total at risk    {format_inr(report.total_at_risk_cents)}")
+    print(f"total at risk    {format_usd(report.total_at_risk_cents)}")
     print()
     print("detected class histogram:")
     for klass, n in sorted(report.detected_histogram.items()):

@@ -40,9 +40,8 @@ class FailureClass(str, Enum):
 
 class PaymentMethod(str, Enum):
     CARD = "card"
-    NETBANKING = "netbanking"
-    UPI = "upi"
-    EMANDATE = "emandate"
+    PAYPAL_BALANCE = "paypal_balance"
+    BANK_ACCOUNT = "bank_account"
 
 
 # --------------------------------------------------------------------------
@@ -87,17 +86,13 @@ _REASON_INDEX: Dict[str, FailureClass] = {
 }
 
 # The `source` vocabulary is per payment method, not global.
+# Synthetic attribute: PayPal's Orders v2 error bodies carry no `source` field
+# that we verified, so these labels only describe where a simulated failure
+# originated.
 SOURCE_VOCABULARY: Mapping[PaymentMethod, Tuple[str, ...]] = {
     PaymentMethod.CARD: ("issuer_bank", "gateway", "internal"),
-    PaymentMethod.NETBANKING: ("issuer_bank", "gateway", "internal"),
-    PaymentMethod.EMANDATE: ("issuer_bank", "bank", "gateway", "internal"),
-    PaymentMethod.UPI: (
-        "customer_psp",
-        "network",
-        "beneficiary_bank",
-        "gateway",
-        "internal",
-    ),
+    PaymentMethod.PAYPAL_BALANCE: ("paypal", "gateway", "internal"),
+    PaymentMethod.BANK_ACCOUNT: ("issuer_bank", "paypal", "internal"),
 }
 
 

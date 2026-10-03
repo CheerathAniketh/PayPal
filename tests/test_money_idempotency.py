@@ -25,9 +25,9 @@ from recoup.idempotency import (
 )
 from recoup.models import AuditEntry, ExecutionMode, Outcome
 from recoup.money import (
-    format_inr,
-    cents_to_rupees,
-    rupees_to_cents,
+    format_usd,
+    cents_to_dollars,
+    dollars_to_cents,
     split_cents,
     total_cents,
 )
@@ -39,7 +39,7 @@ from tests.conftest import make_record
 # --------------------------------------------------------------------------
 def test_money_is_exact_where_float_would_drift():
     """0.1 + 0.2 == 0.3, in cents."""
-    assert rupees_to_cents("0.1") + rupees_to_cents("0.2") == rupees_to_cents("0.3")
+    assert dollars_to_cents("0.1") + dollars_to_cents("0.2") == dollars_to_cents("0.3")
     assert 0.1 + 0.2 != 0.3  # the hazard this removes
 
 
@@ -49,7 +49,7 @@ def test_summing_many_amounts_stays_exact():
     A reviewer who totals the audit log by hand must get the same number the
     report prints.
     """
-    amounts = [rupees_to_cents(f"{v}.33") for v in range(1, 200)]
+    amounts = [dollars_to_cents(f"{v}.33") for v in range(1, 200)]
     assert total_cents(amounts) == sum(amounts)
     # And no float ever sneaks in.
     with pytest.raises(TypeError):
@@ -57,9 +57,9 @@ def test_summing_many_amounts_stays_exact():
 
 
 def test_all_stored_amounts_are_integers():
-    assert isinstance(rupees_to_cents(736.0), int)
-    assert isinstance(rupees_to_cents("99.99"), int)
-    assert rupees_to_cents("736.00") == 73_600
+    assert isinstance(dollars_to_cents(736.0), int)
+    assert isinstance(dollars_to_cents("99.99"), int)
+    assert dollars_to_cents("736.00") == 73_600
 
 
 def test_partial_debit_rounds_down_never_up():
@@ -76,9 +76,9 @@ def test_partial_debit_rounds_down_never_up():
 
 
 def test_display_helpers_are_display_only():
-    assert format_inr(73_600) == "Rs 736.00"
-    assert format_inr(-5000) == "-Rs 50.00"
-    assert cents_to_rupees(73_600) == 736.0
+    assert format_usd(73_600) == "$736.00"
+    assert format_usd(-5000) == "-$50.00"
+    assert cents_to_dollars(73_600) == 736.0
 
 
 # --------------------------------------------------------------------------

@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from config.taxonomy import FailureClass
 from recoup.generator import freeze, generate
-from recoup.money import format_inr
+from recoup.money import format_usd
 
 
 def main() -> None:
@@ -27,7 +27,7 @@ def main() -> None:
     print(
         f"{len(batch.records)} records | {len(batch.customers)} customers "
         f"({batch.recurring_customer_count()} recurring) | "
-        f"{format_inr(batch.total_at_risk_cents())} at risk"
+        f"{format_usd(batch.total_at_risk_cents())} at risk"
     )
     print(
         f"{len(dead)} seeded-dead ({class_five_dead} of them class 5) | "

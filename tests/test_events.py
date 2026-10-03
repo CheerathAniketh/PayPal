@@ -107,7 +107,7 @@ def test_late_pending_after_resolved_is_ignored():
 
 
 def test_duplicate_resolution_does_not_double_count():
-    """Recovered rupees cannot double-count on a retried webhook."""
+    """Recovered dollars cannot double-count on a retried webhook."""
     events = [
         _event(Stage.RESOLVED, FinancialResult.RECOVERED, recovered=73_600),
         _event(Stage.RESOLVED, FinancialResult.RECOVERED, recovered=73_600),

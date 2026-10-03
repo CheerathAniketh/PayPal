@@ -29,7 +29,7 @@ from recoup.agent.outcomes import (
     OutcomeResolution,
 )
 from recoup.agent.state import TerminalStatus
-from recoup.money import format_inr
+from recoup.money import format_usd
 
 
 # --------------------------------------------------------------------------
@@ -39,7 +39,7 @@ from recoup.money import format_inr
 class SchedulerConfig:
     run_id: str = "run_batch"
     start: datetime = field(default_factory=lambda: datetime(2026, 1, 16, 9, 0, 0))
-    batch_budget_cents: int = 10_000_00   # intervention-cost ceiling (Rs 10k)
+    batch_budget_cents: int = 10_000_00   # intervention-cost ceiling ($10k)
     max_passes: int = 40
     tick_hours: float = 24.0
     policy: Policy = field(default_factory=lambda: DEFAULT_POLICY)
@@ -71,10 +71,10 @@ class RunSummary:
     def render(self) -> str:
         return (
             f"[{self.run_id}] {self.recovered_count} recovered "
-            f"({format_inr(self.recovered_cents)}) | "
+            f"({format_usd(self.recovered_cents)}) | "
             f"{self.escalated_count} escalated | {self.abandoned_count} abandoned | "
             f"{self.in_progress_count} awaiting | {self.attempts} attempts | "
-            f"{self.recovery_rate:.1%} of {format_inr(self.total_at_risk_cents)}"
+            f"{self.recovery_rate:.1%} of {format_usd(self.total_at_risk_cents)}"
         )
 
 
