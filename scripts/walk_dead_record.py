@@ -60,11 +60,11 @@ def _print_attempt(n: int, out: Dict[str, Any]) -> None:
 
     # decide
     print(f"  decide     chose {d.get('chosen','?'):<14} "
-          f"net_EV={d.get('net_ev_paise',0):>7} paise  p={d.get('p_recover',0):.3f}")
+          f"net_EV={d.get('net_ev_cents',0):>7} cents  p={d.get('p_recover',0):.3f}")
     for c in d.get("ranked", []):
         mark = "->" if c["intervention"] == d.get("chosen") else "  "
         print(f"             {mark} {c['intervention']:<20} "
-              f"p={c['p_recover']:.3f}  net_EV={c['net_ev_paise']:>7}  "
+              f"p={c['p_recover']:.3f}  net_EV={c['net_ev_cents']:>7}  "
               f"{'contact' if c['is_contact'] else 'silent'}")
     print(f"             rationale: {d.get('rationale','')}")
 
@@ -82,7 +82,7 @@ def _print_attempt(n: int, out: Dict[str, Any]) -> None:
 
     # execute
     if ex:
-        got = format_inr(int(ex.get("amount_recovered_paise", 0)))
+        got = format_inr(int(ex.get("amount_recovered_cents", 0)))
         print(f"  execute    outcome={ex.get('outcome','?'):<12} recovered={got:>10}  "
               f"api_called={ex.get('api_called', False)}  "
               f"async={ex.get('settles_async', False)}")
@@ -115,7 +115,7 @@ def main() -> None:
     print("GRACEFUL FAILURE -- one truly-dead do-not-honour record, end to end")
     print(BAR)
     print(f"record     {dead.record_id}  customer {dead.customer_id}")
-    print(f"amount     {format_inr(dead.amount_paise)}   method {dead.method.value}")
+    print(f"amount     {format_inr(dead.amount_cents)}   method {dead.method.value}")
     print(f"reason     {dead.error_reason}  -> class do_not_honour")
     print("truth      seeded truly-dead: recovery probability ~0 whatever we try")
     print("policy     do_not_honour attempt cap = 1 (one controlled retry, then stop)")
@@ -123,7 +123,7 @@ def main() -> None:
     final_status: Optional[str] = None
     for attempt in range(1, MAX_ATTEMPTS + 1):
         rec = dead.to_json()
-        rec["_outstanding_paise"] = rec["amount_paise"]
+        rec["_outstanding_cents"] = rec["amount_cents"]
         out = graph.invoke(
             {"run_id": "run_walk", "record": rec, "attempt": attempt,
              "now_iso": now.isoformat()}
@@ -156,8 +156,8 @@ def main() -> None:
 def _readable(row: Dict[str, Any]) -> Dict[str, Any]:
     """A trimmed, human-readable view of an audit row for on-screen reading."""
     r = dict(row)
-    if isinstance(r.get("amount_recovered_paise"), int):
-        r["amount_recovered"] = format_inr(r["amount_recovered_paise"])
+    if isinstance(r.get("amount_recovered_cents"), int):
+        r["amount_recovered"] = format_inr(r["amount_recovered_cents"])
     keep = [
         "record_id", "customer_id", "attempt_number", "chosen_action",
         "outcome", "guardrail_checks", "model_score", "amount_recovered",

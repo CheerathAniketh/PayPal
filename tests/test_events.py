@@ -37,12 +37,12 @@ def _event(stage, financial, *, attempt_n=1, recovered=0, amount=73_600,
         stage=stage,
         intervention="retry_now",
         is_contact=False,
-        amount_paise=amount,
+        amount_cents=amount,
         occurred_at=occurred,
         ingested_at=occurred,
         api_result=ApiResult.ACCEPTED,
         financial_result=financial,
-        amount_recovered_paise=recovered,
+        amount_recovered_cents=recovered,
         source=source,
     )
 
@@ -75,7 +75,7 @@ def test_pending_then_resolved_recovers():
     ]
     outcomes = fold(events)
     assert outcomes[1].financial_result is FinancialResult.RECOVERED
-    assert outcomes[1].amount_recovered_paise == 73_600
+    assert outcomes[1].amount_recovered_cents == 73_600
     assert total_recovered(outcomes) == 73_600
 
 
@@ -92,7 +92,7 @@ def test_fold_is_order_independent():
         random.shuffle(shuffled)
         result = fold(shuffled)[1]
         assert result.financial_result is reference.financial_result
-        assert result.amount_recovered_paise == reference.amount_recovered_paise
+        assert result.amount_recovered_cents == reference.amount_recovered_cents
 
 
 def test_late_pending_after_resolved_is_ignored():
@@ -103,7 +103,7 @@ def test_late_pending_after_resolved_is_ignored():
     ]
     outcomes = fold(events)
     assert outcomes[1].financial_result is FinancialResult.RECOVERED
-    assert outcomes[1].amount_recovered_paise == 73_600
+    assert outcomes[1].amount_recovered_cents == 73_600
 
 
 def test_duplicate_resolution_does_not_double_count():
@@ -132,14 +132,14 @@ def test_source_does_not_change_the_fold():
     hook = fold([_event(Stage.RESOLVED, FinancialResult.RECOVERED,
                         recovered=73_600, source="webhook")])
     assert sim[1].financial_result is hook[1].financial_result
-    assert sim[1].amount_recovered_paise == hook[1].amount_recovered_paise
+    assert sim[1].amount_recovered_cents == hook[1].amount_recovered_cents
 
 
 def test_partial_resolution_is_tracked():
     events = [_event(Stage.RESOLVED, FinancialResult.PARTIAL, recovered=36_800)]
     outcomes = fold(events)
     assert outcomes[1].financial_result is FinancialResult.PARTIAL
-    assert outcomes[1].amount_recovered_paise == 36_800
+    assert outcomes[1].amount_recovered_cents == 36_800
 
 
 def test_separate_attempts_fold_separately():

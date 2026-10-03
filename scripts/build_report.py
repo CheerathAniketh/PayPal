@@ -92,19 +92,19 @@ def run_batch():
 def reconcile(summary: RunSummary, scheduler: BatchScheduler) -> Dict[str, Any]:
     """Two independently-summed totals, checked against each other and against
     the scheduler's own running total -- an actual tie-out, not a tautology."""
-    per_record_at_risk = sum(int(st.record["amount_paise"]) for st in scheduler.states.values())
-    per_record_recovered = sum(st.recovered_paise for st in scheduler.states.values())
-    not_recovered = summary.total_at_risk_paise - summary.recovered_paise
+    per_record_at_risk = sum(int(st.record["amount_cents"]) for st in scheduler.states.values())
+    per_record_recovered = sum(st.recovered_cents for st in scheduler.states.values())
+    not_recovered = summary.total_at_risk_cents - summary.recovered_cents
 
     ties = (
-        per_record_at_risk == summary.total_at_risk_paise
-        and per_record_recovered == summary.recovered_paise
-        and summary.recovered_paise + not_recovered == summary.total_at_risk_paise
+        per_record_at_risk == summary.total_at_risk_cents
+        and per_record_recovered == summary.recovered_cents
+        and summary.recovered_cents + not_recovered == summary.total_at_risk_cents
     )
     return {
-        "recovered": summary.recovered_paise,
+        "recovered": summary.recovered_cents,
         "not_recovered": not_recovered,
-        "at_risk": summary.total_at_risk_paise,
+        "at_risk": summary.total_at_risk_cents,
         "rate": summary.recovery_rate,
         "ties": ties,
     }
@@ -147,8 +147,8 @@ def by_class(scheduler: BatchScheduler) -> List[Dict[str, Any]]:
             if classify_reason(st.record.get("error_reason", "")) is not klass:
                 continue
             n += 1
-            at_risk += int(st.record["amount_paise"])
-            recovered += st.recovered_paise
+            at_risk += int(st.record["amount_cents"])
+            recovered += st.recovered_cents
             if st.status == "recovered":
                 n_rec += 1
         rows.append({
@@ -188,7 +188,7 @@ def ledger_rows(scheduler: BatchScheduler, latent) -> List[Dict[str, Any]]:
         ):
             if st.status == "recovered":
                 derived = (
-                    f"final: recovered {format_inr(st.recovered_paise)} "
+                    f"final: recovered {format_inr(st.recovered_cents)} "
                     "(async settlement -- customer acted before the response window)"
                 )
             elif st.status == "escalated":
@@ -203,9 +203,9 @@ def ledger_rows(scheduler: BatchScheduler, latent) -> List[Dict[str, Any]]:
             "record_id": rid,
             "customer_id": st.record["customer_id"],
             "cause": _label(classify_reason(st.record.get("error_reason", "")).value),
-            "amount": int(st.record["amount_paise"]),
+            "amount": int(st.record["amount_cents"]),
             "attempts": st.attempts,
-            "recovered": st.recovered_paise,
+            "recovered": st.recovered_cents,
             "status": st.status,
             "status_label": _label(st.status if st.status != "open" and st.status != "awaiting" else "in_progress"),
             "status_class": STATUS_CLASS.get(st.status, "prog"),

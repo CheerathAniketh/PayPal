@@ -31,7 +31,7 @@ from config.taxonomy import (
 from recoup.economics import (
     EconomicPolicy,
     EconomicStopReason,
-    net_ev_paise,
+    net_ev_cents,
     rank_interventions,
     should_stop_economic,
 )
@@ -48,7 +48,7 @@ class Policy:
     min_cooldown_hours: float = 24.0
     max_contacts_per_window: int = 3
     contact_window_hours: float = 720.0            # 30 days
-    amount_auto_cap_paise: int = 500_000           # Rs 5,000: above -> human gate
+    amount_auto_cap_cents: int = 500_000           # Rs 5,000: above -> human gate
 
     # Per-class attempt caps come from the taxonomy; mirrored here for clarity.
     max_attempts: Dict[FailureClass, int] = field(
@@ -144,8 +144,8 @@ def _p_recover(record: Dict[str, Any], intervention: Intervention) -> float:
     p *= 0.82 ** prior
 
     # Amount pressure: a debit large relative to the customer's usual is harder.
-    avg = max(int(record.get("customer_avg_payment_paise", 1)), 1)
-    ratio = int(record.get("amount_paise", 0)) / avg
+    avg = max(int(record.get("customer_avg_payment_cents", 1)), 1)
+    ratio = int(record.get("amount_cents", 0)) / avg
     if ratio > 1.5:
         p *= 0.85
 
@@ -167,7 +167,7 @@ def _p_recover(record: Dict[str, Any], intervention: Intervention) -> float:
 class Decision:
     failure_class: FailureClass
     chosen: Intervention
-    net_ev_paise: int
+    net_ev_cents: int
     p_recover: float
     ranked: List[Dict[str, Any]]
     stop: bool
@@ -187,13 +187,13 @@ def decide(
     separate predicate (:func:`check_guardrails`).
     """
     klass = classify(record)
-    amount = int(record.get("amount_paise", 0))
+    amount = int(record.get("amount_cents", 0))
 
     if not CANDIDATES.get(klass) or klass is FailureClass.UNKNOWN:
         return Decision(
             failure_class=klass,
             chosen=Intervention.ESCALATE,
-            net_ev_paise=0,
+            net_ev_cents=0,
             p_recover=0.0,
             ranked=[],
             stop=True,
@@ -216,14 +216,14 @@ def decide(
         return Decision(
             failure_class=klass,
             chosen=Intervention.GIVE_UP,
-            net_ev_paise=best.net_ev_paise if best else 0,
+            net_ev_cents=best.net_ev_cents if best else 0,
             p_recover=best.p_recover if best else 0.0,
             ranked=[_ranked_row(c) for c in ranked],
             stop=True,
             stop_reason=reason.value,
             rationale=(
                 f"{klass.value}: best net EV "
-                f"{(best.net_ev_paise if best else 0)} paise does not beat the "
+                f"{(best.net_ev_cents if best else 0)} cents does not beat the "
                 f"stop threshold; giving up."
             ),
         )
@@ -231,14 +231,14 @@ def decide(
     return Decision(
         failure_class=klass,
         chosen=best.intervention,
-        net_ev_paise=best.net_ev_paise,
+        net_ev_cents=best.net_ev_cents,
         p_recover=best.p_recover,
         ranked=[_ranked_row(c) for c in ranked],
         stop=False,
         stop_reason=reason.value,
         rationale=(
             f"{klass.value}: {best.intervention.value} has the highest net EV "
-            f"({best.net_ev_paise} paise, p={best.p_recover:.2f})."
+            f"({best.net_ev_cents} cents, p={best.p_recover:.2f})."
         ),
     )
 
@@ -247,7 +247,7 @@ def _ranked_row(c) -> Dict[str, Any]:
     return {
         "intervention": c.intervention.value,
         "p_recover": round(c.p_recover, 4),
-        "net_ev_paise": c.net_ev_paise,
+        "net_ev_cents": c.net_ev_cents,
         "is_contact": c.is_contact,
     }
 
@@ -312,12 +312,12 @@ def check_guardrails(
     checks["contact_cap"] = "pass"
 
     # 4. Amount gate: a large debit needs a human, not an autonomous retry.
-    if action.touches_instrument and int(record.get("amount_paise", 0)) > policy.amount_auto_cap_paise:
+    if action.touches_instrument and int(record.get("amount_cents", 0)) > policy.amount_auto_cap_cents:
         checks["amount_gate"] = "fail"
         return _blocked(
             checks,
-            f"amount {record.get('amount_paise')} over auto-cap "
-            f"{policy.amount_auto_cap_paise}: needs human sign-off",
+            f"amount {record.get('amount_cents')} over auto-cap "
+            f"{policy.amount_auto_cap_cents}: needs human sign-off",
         )
     checks["amount_gate"] = "pass"
 

@@ -31,11 +31,11 @@ class Executor(Protocol):
         run_id: str,
         attempt_number: int,
         attempt_at_iso: str,
-        outstanding_paise: int,
+        outstanding_cents: int,
     ) -> Dict[str, Any]:
         """Fire the action.  Returns a dict with at least ``outcome``,
-        ``amount_recovered_paise``, ``api_called``, ``was_mocked``,
-        ``razorpay_entity_id``, ``idempotency_key``, and ``settles_async``."""
+        ``amount_recovered_cents``, ``api_called``, ``was_mocked``,
+        ``paypal_entity_id``, ``idempotency_key``, and ``settles_async``."""
         ...
 
 

@@ -22,7 +22,7 @@ from recoup.models import FailedRecord
 class IngestReport:
     n_records: int
     n_customers: int
-    total_at_risk_paise: int
+    total_at_risk_cents: int
     detected_histogram: Dict[str, int] = field(default_factory=dict)
     unknown_record_ids: List[str] = field(default_factory=list)
     detection_mismatches: List[Dict[str, str]] = field(default_factory=list)
@@ -80,7 +80,7 @@ def ingest(
     return IngestReport(
         n_records=len(records),
         n_customers=len({r.customer_id for r in records}),
-        total_at_risk_paise=sum(r.amount_paise for r in records),
+        total_at_risk_cents=sum(r.amount_cents for r in records),
         detected_histogram=histogram,
         unknown_record_ids=unknowns,
         detection_mismatches=mismatches,

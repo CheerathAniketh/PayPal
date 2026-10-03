@@ -37,12 +37,12 @@ CREATE TABLE IF NOT EXISTS outcome_events (
     stage                   TEXT NOT NULL,
     intervention            TEXT NOT NULL,
     is_contact              INTEGER NOT NULL,
-    amount_paise            INTEGER NOT NULL,
+    amount_cents            INTEGER NOT NULL,
     occurred_at             TEXT NOT NULL,
     ingested_at             TEXT NOT NULL,
     api_result              TEXT NOT NULL,
     financial_result        TEXT NOT NULL,
-    amount_recovered_paise  INTEGER NOT NULL DEFAULT 0,
+    amount_recovered_cents  INTEGER NOT NULL DEFAULT 0,
     failure_reason          TEXT NOT NULL DEFAULT '',
     source                  TEXT NOT NULL DEFAULT 'simulator',
     raw                     TEXT NOT NULL DEFAULT '{}'
@@ -94,14 +94,14 @@ class EventStore:
                 """
                 INSERT INTO outcome_events (
                     idempotency_key, run_id, record_id, customer_id, attempt_n,
-                    stage, intervention, is_contact, amount_paise, occurred_at,
+                    stage, intervention, is_contact, amount_cents, occurred_at,
                     ingested_at, api_result, financial_result,
-                    amount_recovered_paise, failure_reason, source, raw
+                    amount_recovered_cents, failure_reason, source, raw
                 ) VALUES (
                     :idempotency_key, :run_id, :record_id, :customer_id,
                     :attempt_n, :stage, :intervention, :is_contact,
-                    :amount_paise, :occurred_at, :ingested_at, :api_result,
-                    :financial_result, :amount_recovered_paise, :failure_reason,
+                    :amount_cents, :occurred_at, :ingested_at, :api_result,
+                    :financial_result, :amount_recovered_cents, :failure_reason,
                     :source, :raw
                 )
                 """,
@@ -126,7 +126,7 @@ class EventStore:
     def fold_record(self, record_id: str) -> Dict[int, RecordOutcome]:
         return fold(self.events_for_record(record_id))
 
-    def total_recovered_paise(self, run_id: str | None = None) -> int:
+    def total_recovered_cents(self, run_id: str | None = None) -> int:
         """Recovered money, from RESOLVED events only, deduped by attempt.
 
         Folds each record so a duplicated resolution cannot be counted twice.
@@ -149,7 +149,7 @@ class EventStore:
         total = 0
         for rid in record_ids:
             for outcome in self.fold_record(rid).values():
-                total += outcome.amount_recovered_paise
+                total += outcome.amount_recovered_cents
         return total
 
     def contact_count(self, customer_id: str, since_iso: str) -> int:
@@ -178,12 +178,12 @@ class EventStore:
             stage=Stage(row["stage"]),
             intervention=row["intervention"],
             is_contact=bool(row["is_contact"]),
-            amount_paise=row["amount_paise"],
+            amount_cents=row["amount_cents"],
             occurred_at=row["occurred_at"],
             ingested_at=row["ingested_at"],
             api_result=ApiResult(row["api_result"]),
             financial_result=FinancialResult(row["financial_result"]),
-            amount_recovered_paise=row["amount_recovered_paise"],
+            amount_recovered_cents=row["amount_recovered_cents"],
             failure_reason=row["failure_reason"],
             source=row["source"],
             raw=json.loads(row["raw"]),

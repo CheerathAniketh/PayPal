@@ -2,7 +2,7 @@
 
 The state is a plain ``TypedDict`` -- LangGraph merges each node's returned dict
 into it.  ``record`` is the Phase-1 failed-payment shape (amount in integer
-paise); the controller sets ``run_id``, ``record``, ``attempt``, ``now_iso``
+cents); the controller sets ``run_id``, ``record``, ``attempt``, ``now_iso``
 before invoke, and the nodes fill the rest.
 """
 

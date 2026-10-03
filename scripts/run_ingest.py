@@ -18,7 +18,7 @@ def main() -> None:
     print("-" * 50)
     print(f"records          {report.n_records}")
     print(f"customers        {report.n_customers}")
-    print(f"total at risk    {format_inr(report.total_at_risk_paise)}")
+    print(f"total at risk    {format_inr(report.total_at_risk_cents)}")
     print()
     print("detected class histogram:")
     for klass, n in sorted(report.detected_histogram.items()):

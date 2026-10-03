@@ -21,15 +21,15 @@ from recoup.idempotency import (
     is_terminal,
     receipt_id,
     staged_key,
-    RAZORPAY_RECEIPT_LIMIT,
+    PAYPAL_REFERENCE_LIMIT,
 )
 from recoup.models import AuditEntry, ExecutionMode, Outcome
 from recoup.money import (
     format_inr,
-    paise_to_rupees,
-    rupees_to_paise,
-    split_paise,
-    total_paise,
+    cents_to_rupees,
+    rupees_to_cents,
+    split_cents,
+    total_cents,
 )
 from tests.conftest import make_record
 
@@ -38,8 +38,8 @@ from tests.conftest import make_record
 # Money is exact
 # --------------------------------------------------------------------------
 def test_money_is_exact_where_float_would_drift():
-    """0.1 + 0.2 == 0.3, in paise."""
-    assert rupees_to_paise("0.1") + rupees_to_paise("0.2") == rupees_to_paise("0.3")
+    """0.1 + 0.2 == 0.3, in cents."""
+    assert rupees_to_cents("0.1") + rupees_to_cents("0.2") == rupees_to_cents("0.3")
     assert 0.1 + 0.2 != 0.3  # the hazard this removes
 
 
@@ -49,17 +49,17 @@ def test_summing_many_amounts_stays_exact():
     A reviewer who totals the audit log by hand must get the same number the
     report prints.
     """
-    amounts = [rupees_to_paise(f"{v}.33") for v in range(1, 200)]
-    assert total_paise(amounts) == sum(amounts)
+    amounts = [rupees_to_cents(f"{v}.33") for v in range(1, 200)]
+    assert total_cents(amounts) == sum(amounts)
     # And no float ever sneaks in.
     with pytest.raises(TypeError):
-        total_paise([100, 2.5])
+        total_cents([100, 2.5])
 
 
 def test_all_stored_amounts_are_integers():
-    assert isinstance(rupees_to_paise(736.0), int)
-    assert isinstance(rupees_to_paise("99.99"), int)
-    assert rupees_to_paise("736.00") == 73_600
+    assert isinstance(rupees_to_cents(736.0), int)
+    assert isinstance(rupees_to_cents("99.99"), int)
+    assert rupees_to_cents("736.00") == 73_600
 
 
 def test_partial_debit_rounds_down_never_up():
@@ -68,17 +68,17 @@ def test_partial_debit_rounds_down_never_up():
     When a rounding direction must be chosen, choose the one that cannot inflate
     the headline recovery figure.
     """
-    assert split_paise(73_601, 0.5) == 36_800  # 36800.5 -> floor
-    assert split_paise(101, 0.5) == 50         # 50.5 -> floor
-    assert split_paise(100, 1.0) == 100
+    assert split_cents(73_601, 0.5) == 36_800  # 36800.5 -> floor
+    assert split_cents(101, 0.5) == 50         # 50.5 -> floor
+    assert split_cents(100, 1.0) == 100
     with pytest.raises(ValueError):
-        split_paise(100, 1.5)
+        split_cents(100, 1.5)
 
 
 def test_display_helpers_are_display_only():
     assert format_inr(73_600) == "Rs 736.00"
     assert format_inr(-5000) == "-Rs 50.00"
-    assert paise_to_rupees(73_600) == 736.0
+    assert cents_to_rupees(73_600) == 736.0
 
 
 # --------------------------------------------------------------------------
@@ -109,7 +109,7 @@ def test_receipt_fits_razorpay_limit():
         for rec in ("rec_0001", "rec_9999"):
             for attempt in (1, 2, 3):
                 r = receipt_id(run, rec, attempt)
-                assert len(r) <= RAZORPAY_RECEIPT_LIMIT
+                assert len(r) <= PAYPAL_REFERENCE_LIMIT
                 seen.add(r)
     assert len(seen) == 12  # all distinct
 
@@ -128,7 +128,7 @@ def _entry(store_run="run_1", record_id="rec_0001", attempt=1, key=None):
         guardrail_checks={},
         model_score=None,
         outcome=Outcome.FAILED,
-        amount_recovered_paise=0,
+        amount_recovered_cents=0,
         idempotency_key=key or attempt_key(store_run, record_id, attempt),
         execution_mode=ExecutionMode.SIMULATED,
         api_called=False,
@@ -205,8 +205,8 @@ def test_partial_recovery_is_not_terminal():
 
 
 def test_outstanding_balance_tracks_partial_recovery(store):
-    record = make_record(amount_paise=73_600)
+    record = make_record(amount_cents=73_600)
     store.upsert_record(record)
-    assert store.outstanding_paise(record.record_id) == 73_600
+    assert store.outstanding_cents(record.record_id) == 73_600
     store.add_recovered(record.record_id, 36_800)
-    assert store.outstanding_paise(record.record_id) == 36_800
+    assert store.outstanding_cents(record.record_id) == 36_800

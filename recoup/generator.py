@@ -26,7 +26,7 @@ from config.taxonomy import (
     PaymentMethod,
 )
 from recoup.models import Customer, FailedRecord, LatentTruth
-from recoup.money import rupees_to_paise
+from recoup.money import rupees_to_cents
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 FROZEN_PATH = DATA_DIR / "batch_frozen.json"
@@ -118,8 +118,8 @@ class Batch:
         held = set(self.holdout_customer_ids)
         return [r for r in self.records if r.customer_id not in held]
 
-    def total_at_risk_paise(self) -> int:
-        return sum(r.amount_paise for r in self.records)
+    def total_at_risk_cents(self) -> int:
+        return sum(r.amount_cents for r in self.records)
 
     def recurring_customer_count(self) -> int:
         counts: Dict[str, int] = {}
@@ -150,7 +150,7 @@ def generate(config: GeneratorConfig = GeneratorConfig()) -> Batch:
     for i in range(config.n_customers):
         cid = f"cust_{i:04d}"
         tenure = int(np.clip(rng.lognormal(mean=5.55, sigma=0.85), 14, 2200))
-        avg_payment = rupees_to_paise(
+        avg_payment = rupees_to_cents(
             float(np.clip(rng.lognormal(mean=6.2, sigma=0.5), 90, 12000))
         )
         engagement = _beta_around(
@@ -168,7 +168,7 @@ def generate(config: GeneratorConfig = GeneratorConfig()) -> Batch:
         customers[cid] = Customer(
             customer_id=cid,
             tenure_days=tenure,
-            avg_payment_paise=avg_payment,
+            avg_payment_cents=avg_payment,
             salary_day=int(rng.choice(SALARY_DAYS)),
             is_subscriber=bool(rng.random() < 0.72),
             prior_failures=int(rng.poisson(0.8)),
@@ -215,7 +215,7 @@ def generate(config: GeneratorConfig = GeneratorConfig()) -> Batch:
             if klass is FailureClass.MANDATE_BROKEN
             else config.amount_mu
         )
-        amount = rupees_to_paise(
+        amount = rupees_to_cents(
             float(np.clip(rng.lognormal(mean=mu, sigma=config.amount_sigma), 49, 40000))
         )
 
@@ -244,7 +244,7 @@ def generate(config: GeneratorConfig = GeneratorConfig()) -> Batch:
             FailedRecord(
                 record_id=record_id,
                 customer_id=cid,
-                amount_paise=amount,
+                amount_cents=amount,
                 method=method,
                 error_reason=reason,
                 error_source=source,
@@ -254,7 +254,7 @@ def generate(config: GeneratorConfig = GeneratorConfig()) -> Batch:
                 pre_debit_notified=(not is_mandate_debit) or bool(rng.random() < 0.85),
                 subscription_status=status,
                 customer_tenure_days=customer.tenure_days,
-                customer_avg_payment_paise=customer.avg_payment_paise,
+                customer_avg_payment_cents=customer.avg_payment_cents,
                 customer_salary_day=customer.salary_day,
                 customer_prior_failures=customer.prior_failures,
                 customer_is_subscriber=customer.is_subscriber,

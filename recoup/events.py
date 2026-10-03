@@ -74,12 +74,12 @@ class OutcomeEvent:
     stage: Stage
     intervention: str
     is_contact: bool
-    amount_paise: int
+    amount_cents: int
     occurred_at: str            # when it happened -> drives ALL window/ordering
     ingested_at: str            # when we heard about it -> provenance only
     api_result: ApiResult
     financial_result: FinancialResult
-    amount_recovered_paise: int = 0
+    amount_recovered_cents: int = 0
     failure_reason: str = ""
     source: str = "simulator"   # "simulator" | "webhook" -- NEVER branched on
     raw: Dict[str, Any] = field(default_factory=dict)
@@ -87,21 +87,21 @@ class OutcomeEvent:
     def __post_init__(self) -> None:
         if self.attempt_n < 1:
             raise IllegalEvent(f"attempt_n is 1-based, got {self.attempt_n}")
-        if self.amount_recovered_paise < 0:
-            raise IllegalEvent("amount_recovered_paise cannot be negative")
-        if self.amount_recovered_paise > self.amount_paise:
+        if self.amount_recovered_cents < 0:
+            raise IllegalEvent("amount_recovered_cents cannot be negative")
+        if self.amount_recovered_cents > self.amount_cents:
             raise IllegalEvent(
                 "recovered cannot exceed the amount attempted "
-                f"({self.amount_recovered_paise} > {self.amount_paise})"
+                f"({self.amount_recovered_cents} > {self.amount_cents})"
             )
         if (
             self.financial_result is FinancialResult.RECOVERED
-            and self.amount_recovered_paise <= 0
+            and self.amount_recovered_cents <= 0
         ):
             raise IllegalEvent("a RECOVERED event must recover a positive amount")
         if (
             self.financial_result is FinancialResult.NOT_RECOVERED
-            and self.amount_recovered_paise != 0
+            and self.amount_recovered_cents != 0
         ):
             raise IllegalEvent("a NOT_RECOVERED event cannot recover money")
 
@@ -124,12 +124,12 @@ class OutcomeEvent:
             "stage": self.stage.value,
             "intervention": self.intervention,
             "is_contact": int(self.is_contact),
-            "amount_paise": self.amount_paise,
+            "amount_cents": self.amount_cents,
             "occurred_at": self.occurred_at,
             "ingested_at": self.ingested_at,
             "api_result": self.api_result.value,
             "financial_result": self.financial_result.value,
-            "amount_recovered_paise": self.amount_recovered_paise,
+            "amount_recovered_cents": self.amount_recovered_cents,
             "failure_reason": self.failure_reason,
             "source": self.source,
             "raw": json.dumps(self.raw, default=str),
@@ -147,7 +147,7 @@ class RecordOutcome:
     record_id: str
     attempt_n: int
     financial_result: FinancialResult = FinancialResult.PENDING
-    amount_recovered_paise: int = 0
+    amount_recovered_cents: int = 0
     resolved: bool = False
 
     @property
@@ -177,11 +177,11 @@ def fold(events: Iterable[OutcomeEvent]) -> Dict[int, RecordOutcome]:
 
         if event.financial_result in _RESOLVED_FINANCIAL:
             current.financial_result = event.financial_result
-            current.amount_recovered_paise = event.amount_recovered_paise
+            current.amount_recovered_cents = event.amount_recovered_cents
             current.resolved = True
         # A PENDING event on a still-pending attempt leaves it pending.
     return outcomes
 
 
 def total_recovered(outcomes: Dict[int, RecordOutcome]) -> int:
-    return sum(o.amount_recovered_paise for o in outcomes.values())
+    return sum(o.amount_recovered_cents for o in outcomes.values())

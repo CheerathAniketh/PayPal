@@ -88,8 +88,8 @@ def _by_class(scheduler, latent) -> List[Tuple[str, int, int, int, int]]:
             if classify_reason(st.record.get("error_reason", "")) is not klass:
                 continue
             n += 1
-            at_risk += int(st.record["amount_paise"])
-            recovered += st.recovered_paise
+            at_risk += int(st.record["amount_cents"])
+            recovered += st.recovered_cents
             if st.status == "recovered":
                 n_rec += 1
         rows.append((klass.value, at_risk, recovered, n, n_rec))
@@ -132,15 +132,15 @@ def _compliance_violations(audit_rows: List[Dict[str, Any]]) -> int:
 
 def _print_scorecard(summary: RunSummary, scheduler, latent, audit) -> None:
     print(f"\n{DASH}\nRECOVERY")
-    print(f"  at risk        {format_inr(summary.total_at_risk_paise)}")
-    print(f"  recovered      {format_inr(summary.recovered_paise)}  "
+    print(f"  at risk        {format_inr(summary.total_at_risk_cents)}")
+    print(f"  recovered      {format_inr(summary.recovered_cents)}  "
           f"({summary.recovery_rate:.1%})")
     print(f"  recovered      {summary.recovered_count} records | "
           f"escalated {summary.escalated_count} | abandoned {summary.abandoned_count} | "
           f"awaiting {summary.in_progress_count}")
     print(f"  work done      {summary.attempts} attempts | "
           f"{summary.contacts_made} customer contacts | "
-          f"budget {format_inr(summary.budget_spent_paise)}")
+          f"budget {format_inr(summary.budget_spent_cents)}")
 
     print(f"\n{DASH}\nRECOVERY BY FAILURE CLASS")
     print(f"  {'class':<20} {'recovered / at risk':>26}   {'rate':>6}   {'n':>7}")
@@ -174,7 +174,7 @@ def _print_sample_receipts(scheduler, k: int = 2) -> None:
                 "outcome": row.get("outcome"),
                 "guardrail_checks": row.get("guardrail_checks"),
                 "model_score": row.get("model_score"),
-                "recovered_paise": row.get("amount_recovered_paise"),
+                "recovered_cents": row.get("amount_recovered_cents"),
             }
             print(json.dumps(keep))
             shown += 1
@@ -280,12 +280,12 @@ def main() -> None:
 
     # ---- headline comparison ----
     print("\n" + BAR + "\nHEADLINE — realized recovery, rules vs model\n" + BAR)
-    print(f"  rules   {format_inr(rules_summary.recovered_paise):>14}  "
+    print(f"  rules   {format_inr(rules_summary.recovered_cents):>14}  "
           f"{rules_summary.recovery_rate:6.1%}")
     if model_summary is not None:
-        delta = model_summary.recovered_paise - rules_summary.recovered_paise
+        delta = model_summary.recovered_cents - rules_summary.recovered_cents
         sign = "+" if delta >= 0 else "-"
-        print(f"  model   {format_inr(model_summary.recovered_paise):>14}  "
+        print(f"  model   {format_inr(model_summary.recovered_cents):>14}  "
               f"{model_summary.recovery_rate:6.1%}   "
               f"({sign}{format_inr(abs(delta))} vs rules)")
         print(f"\n  Both runs share the same deterministic environment draws; the")

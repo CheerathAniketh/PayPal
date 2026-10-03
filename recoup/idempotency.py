@@ -25,7 +25,7 @@ from enum import Enum
 from typing import Mapping, Set
 
 # Razorpay's `receipt` field is capped at 40 characters.
-RAZORPAY_RECEIPT_LIMIT = 40
+PAYPAL_REFERENCE_LIMIT = 40
 
 
 # --------------------------------------------------------------------------
@@ -66,8 +66,8 @@ def receipt_id(run_id: str, record_id: str, attempt_number: int) -> str:
     full = attempt_key(run_id, record_id, attempt_number)
     digest = hashlib.sha256(full.encode("utf-8")).hexdigest()[:16]
     receipt = f"rcp_{digest}_a{attempt_number}"
-    if len(receipt) > RAZORPAY_RECEIPT_LIMIT:  # pragma: no cover - guard
-        receipt = receipt[:RAZORPAY_RECEIPT_LIMIT]
+    if len(receipt) > PAYPAL_REFERENCE_LIMIT:  # pragma: no cover - guard
+        receipt = receipt[:PAYPAL_REFERENCE_LIMIT]
     return receipt
 
 

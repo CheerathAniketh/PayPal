@@ -25,7 +25,7 @@ from recoup.clock import SimulatedClock
 from recoup.environment import RecoveryEnvironment
 from recoup.executor import Executor as PaymentsExecutor
 from recoup.models import ExecutionMode, Outcome
-from recoup.money import format_inr, split_paise
+from recoup.money import format_inr, split_cents
 
 
 # --------------------------------------------------------------------------
@@ -86,7 +86,7 @@ class DemoExecutor:
         run_id: str,
         attempt_number: int,
         attempt_at_iso: str,
-        outstanding_paise: int,
+        outstanding_cents: int,
     ) -> Dict[str, Any]:
         from recoup.models import FailedRecord
 
@@ -101,12 +101,12 @@ class DemoExecutor:
             key = f"recoup:{run_id}:{record['record_id']}:attempt:{attempt_number}"
             return {
                 "outcome": "in_progress",
-                "amount_recovered_paise": 0,
-                "amount_attempted_paise": outstanding_paise,
+                "amount_recovered_cents": 0,
+                "amount_attempted_cents": outstanding_cents,
                 "api_called": False,
                 "was_mocked": not spec(intervention).contacts_customer,
                 "mock_reason": "",
-                "razorpay_entity_id": None,
+                "paypal_entity_id": None,
                 "idempotency_key": key,
                 "settles_async": True,
             }
@@ -127,16 +127,16 @@ class DemoExecutor:
             run_id=run_id,
             attempt_number=attempt_number,
             attempt_at=attempt_at,
-            outstanding_paise=outstanding_paise,
+            outstanding_cents=outstanding_cents,
         )
         return {
             "outcome": result.outcome.value,
-            "amount_recovered_paise": result.amount_recovered_paise,
-            "amount_attempted_paise": result.amount_attempted_paise,
+            "amount_recovered_cents": result.amount_recovered_cents,
+            "amount_attempted_cents": result.amount_attempted_cents,
             "api_called": result.api_called,
             "was_mocked": result.was_mocked,
             "mock_reason": result.mock_reason,
-            "razorpay_entity_id": result.razorpay_entity_id,
+            "paypal_entity_id": result.paypal_entity_id,
             "idempotency_key": result.idempotency_key,
             "settles_async": False,
         }
@@ -167,11 +167,11 @@ class TemplateNarrator:
             execution = state.get("execution", {})
             guardrail = state.get("guardrail", {})
             status = state.get("terminal_status", "?")
-            amount = format_inr(int(record.get("amount_paise", 0)))
+            amount = format_inr(int(record.get("amount_cents", 0)))
             who = record.get("customer_id", "?")
 
             if status == "recovered":
-                got = format_inr(int(execution.get("amount_recovered_paise", 0)))
+                got = format_inr(int(execution.get("amount_recovered_cents", 0)))
                 return (
                     f"Recovered {got} of {amount} from {who} via "
                     f"{decision.get('chosen', '?')}."
@@ -182,7 +182,7 @@ class TemplateNarrator:
                         f"Sent {decision.get('chosen', '?')} to {who} for "
                         f"{amount}; awaiting customer action."
                     )
-                got = int(execution.get("amount_recovered_paise", 0))
+                got = int(execution.get("amount_recovered_cents", 0))
                 if got > 0:
                     return (
                         f"Partially recovered {format_inr(got)} of {amount} from "

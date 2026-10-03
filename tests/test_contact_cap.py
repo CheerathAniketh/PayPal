@@ -40,7 +40,7 @@ def _contact_event(store, customer_id, record_id, attempt_n, occurred):
             stage=Stage.FIRED,
             intervention="update_payment_method",
             is_contact=True,
-            amount_paise=50_000,
+            amount_cents=50_000,
             occurred_at=occurred.isoformat(),
             ingested_at=occurred.isoformat(),
             api_result=ApiResult.ACCEPTED,
@@ -59,13 +59,13 @@ def test_duplicate_event_is_a_no_op():
     event = OutcomeEvent(
         run_id="run_1", record_id="rec_1", customer_id="cust_1", attempt_n=1,
         stage=Stage.RESOLVED, intervention="retry_now", is_contact=False,
-        amount_paise=73_600, occurred_at=now.isoformat(), ingested_at=now.isoformat(),
+        amount_cents=73_600, occurred_at=now.isoformat(), ingested_at=now.isoformat(),
         api_result=ApiResult.ACCEPTED, financial_result=FinancialResult.RECOVERED,
-        amount_recovered_paise=73_600,
+        amount_recovered_cents=73_600,
     )
     assert store.ingest_outcome(event) is True
     assert store.ingest_outcome(event) is False  # duplicate
-    assert store.total_recovered_paise() == 73_600  # not doubled
+    assert store.total_recovered_cents() == 73_600  # not doubled
     store.close()
 
 
@@ -142,7 +142,7 @@ def test_silent_retries_do_not_count_against_the_cap():
         OutcomeEvent(
             run_id="run_1", record_id="rec_1", customer_id="cust_1", attempt_n=1,
             stage=Stage.FIRED, intervention="retry_now", is_contact=False,
-            amount_paise=50_000, occurred_at=now.isoformat(),
+            amount_cents=50_000, occurred_at=now.isoformat(),
             ingested_at=now.isoformat(), api_result=ApiResult.ACCEPTED,
             financial_result=FinancialResult.PENDING,
         )
@@ -157,7 +157,7 @@ def test_silent_retries_do_not_count_against_the_cap():
 def _isf_record() -> tuple[FailedRecord, Customer, LatentTruth]:
     customer = make_customer(income_regularity=0.9, salary_day=1)
     record = make_record(customer=customer, reason="insufficient_funds",
-                         amount_paise=73_600)
+                         amount_cents=73_600)
     latent = make_latent(base_logodds=6.0, income_regularity=0.9)  # will recover
     return record, customer, latent
 
@@ -175,7 +175,7 @@ def test_execute_returns_before_the_outcome_is_known():
 
     outcomes = store.fold_record(record.record_id)
     assert outcomes[1].financial_result is FinancialResult.PENDING
-    assert store.total_recovered_paise() == 0  # nothing settled yet
+    assert store.total_recovered_cents() == 0  # nothing settled yet
     store.close()
 
 
@@ -197,7 +197,7 @@ def test_settlement_resolves_through_the_same_ingest_path():
 
     outcomes = store.fold_record(record.record_id)
     assert outcomes[1].financial_result is FinancialResult.RECOVERED
-    assert store.total_recovered_paise() == 73_600
+    assert store.total_recovered_cents() == 73_600
     store.close()
 
 
@@ -210,11 +210,11 @@ def test_settlement_is_idempotent_if_replayed():
     gw.fire(record, customer, latent, Intervention.RETRY_NOW,
             run_id="run_1", attempt_n=1, now=now)
     gw.settle_all(now + timedelta(hours=25))
-    total_once = store.total_recovered_paise()
+    total_once = store.total_recovered_cents()
 
     # Re-ingest the resolved event directly (a duplicate webhook).
     resolved = [e for e in store.events_for_record(record.record_id)
                 if e.stage is Stage.RESOLVED][0]
     store.ingest_outcome(resolved)
-    assert store.total_recovered_paise() == total_once
+    assert store.total_recovered_cents() == total_once
     store.close()

@@ -66,7 +66,7 @@ class Customer:
 
     customer_id: str
     tenure_days: int
-    avg_payment_paise: int
+    avg_payment_cents: int
     salary_day: int                 # observable: billing/credit anchor day
     is_subscriber: bool
     prior_failures: int
@@ -79,7 +79,7 @@ class Customer:
         return {
             "customer_id": self.customer_id,
             "tenure_days": self.tenure_days,
-            "avg_payment_paise": self.avg_payment_paise,
+            "avg_payment_cents": self.avg_payment_cents,
             "salary_day": self.salary_day,
             "is_subscriber": self.is_subscriber,
             "prior_failures": self.prior_failures,
@@ -92,7 +92,7 @@ class FailedRecord:
 
     record_id: str
     customer_id: str
-    amount_paise: int
+    amount_cents: int
     method: PaymentMethod
     error_reason: str
     error_source: str
@@ -102,7 +102,7 @@ class FailedRecord:
     pre_debit_notified: bool
     subscription_status: str        # active | paused | halted | cancelled | none
     customer_tenure_days: int
-    customer_avg_payment_paise: int
+    customer_avg_payment_cents: int
     customer_salary_day: int
     customer_prior_failures: int
     customer_is_subscriber: bool
@@ -114,7 +114,7 @@ class FailedRecord:
         dataclass should be an explicit decision to expose it, not an accident.
         """
         return {
-            "amount_paise": self.amount_paise,
+            "amount_cents": self.amount_cents,
             "method": self.method.value,
             "error_reason": self.error_reason,
             "error_source": self.error_source,
@@ -123,12 +123,12 @@ class FailedRecord:
             "pre_debit_notified": int(self.pre_debit_notified),
             "subscription_status": self.subscription_status,
             "customer_tenure_days": self.customer_tenure_days,
-            "customer_avg_payment_paise": self.customer_avg_payment_paise,
+            "customer_avg_payment_cents": self.customer_avg_payment_cents,
             "customer_salary_day": self.customer_salary_day,
             "customer_prior_failures": self.customer_prior_failures,
             "customer_is_subscriber": int(self.customer_is_subscriber),
             "amount_ratio": (
-                self.amount_paise / max(self.customer_avg_payment_paise, 1)
+                self.amount_cents / max(self.customer_avg_payment_cents, 1)
             ),
         }
 
@@ -209,11 +209,11 @@ class AuditEntry:
     guardrail_checks: Dict[str, Any]
     model_score: Optional[float]
     outcome: Outcome
-    amount_recovered_paise: int
+    amount_recovered_cents: int
     idempotency_key: str
     execution_mode: ExecutionMode
     api_called: bool
-    razorpay_entity_id: Optional[str] = None
+    paypal_entity_id: Optional[str] = None
     was_mocked: bool = False
     mock_reason: str = ""
     api_error: str = ""
@@ -233,11 +233,11 @@ class AuditEntry:
             "guardrail_checks": json.dumps(self.guardrail_checks, default=str),
             "model_score": self.model_score,
             "outcome": self.outcome.value,
-            "amount_recovered_paise": self.amount_recovered_paise,
+            "amount_recovered_cents": self.amount_recovered_cents,
             "idempotency_key": self.idempotency_key,
             "execution_mode": self.execution_mode.value,
             "api_called": int(self.api_called),
-            "razorpay_entity_id": self.razorpay_entity_id,
+            "paypal_entity_id": self.paypal_entity_id,
             "was_mocked": int(self.was_mocked),
             "mock_reason": self.mock_reason,
             "api_error": self.api_error,
@@ -251,6 +251,6 @@ class BatchStats:
     n_records: int
     n_customers: int
     n_recurring_customers: int
-    total_at_risk_paise: int
+    total_at_risk_cents: int
     class_histogram: Dict[str, int] = field(default_factory=dict)
     n_truly_dead: int = 0

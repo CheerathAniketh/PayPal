@@ -48,35 +48,37 @@ class PaymentMethod(str, Enum):
 # --------------------------------------------------------------------------
 # Reason-code lookup
 # --------------------------------------------------------------------------
-# Verified against Razorpay's live error tables. Every string here is one
-# Razorpay actually returns; nothing is written from memory.
+# Source: PayPal Orders v2 `details[].issue` values. INSTRUMENT_DECLINED,
+# TRANSACTION_REFUSED, PAYER_ACTION_REQUIRED, ORDER_NOT_APPROVED,
+# PAYER_ACCOUNT_RESTRICTED, TRANSACTION_LIMIT_EXCEEDED and HTTP 500
+# INTERNAL_SERVER_ERROR were all returned by the sandbox
+# (scripts/probe_mock_errors.py). CARD_EXPIRED is in PayPal's docs but the
+# sandbox mock header rejects it (403). "insufficient_funds" is an INTERNAL
+# label: PayPal returned no such issue code in testing, so it is only
+# reachable from synthetic data.
+# Keys are lowercase because classify_reason() lowercases its input.
+# payer_account_restricted is deliberately unmapped: retrying a restricted
+# account is pointless, so it falls through to UNKNOWN -> ESCALATE.
 REASON_MAP: Mapping[FailureClass, Tuple[str, ...]] = {
     FailureClass.INSUFFICIENT_FUNDS: (
         "insufficient_funds",
+        "transaction_limit_exceeded",
     ),
     FailureClass.BANK_DOWNTIME: (
-        "bank_technical_error",
-        "gateway_technical_error",
-        "bank_not_available",
-        "bank_cutoff_in_progress",
-        "server_error",
+        "internal_server_error",
     ),
     FailureClass.CARD_EXPIRED: (
         "card_expired",
     ),
     FailureClass.MANDATE_BROKEN: (
-        "mandate_creation_declined",
-        "mandate_creation_failed",
-        "mandate_creation_expired",
-        "mandate_creation_timeout",
-        "reqauth_mandate_not_acknowledged",
+        # Old name kept for now: "the buyer must act again before money can
+        # move", which is what these two PayPal issues mean.
+        "payer_action_required",
+        "order_not_approved",
     ),
     FailureClass.DO_NOT_HONOUR: (
-        # 'do_not_honour' is ISO-8583 terminology and is NEVER returned by
-        # Razorpay. Hard declines surface as these three strings.
-        "card_declined",
-        "payment_declined",
-        "payment_risk_check_failed",
+        "instrument_declined",
+        "transaction_refused",
     ),
 }
 

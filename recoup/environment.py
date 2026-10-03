@@ -188,7 +188,7 @@ class RecoveryEnvironment:
 
         if action.touches_instrument:
             z += self._liquidity_term(customer, latent, attempt_at)
-            ratio = record.amount_paise / max(customer.avg_payment_paise, 1)
+            ratio = record.amount_cents / max(customer.avg_payment_cents, 1)
             # A partial debit asks for less money, so it feels less pressure.
             z -= cfg.amount_pressure * ratio * action.recovery_fraction
             if intervention is Intervention.RETRY_SMALLER_AMOUNT:

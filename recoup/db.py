@@ -30,8 +30,8 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS records (
     record_id                   TEXT PRIMARY KEY,
     customer_id                 TEXT NOT NULL,
-    amount_paise                INTEGER NOT NULL,
-    recovered_paise             INTEGER NOT NULL DEFAULT 0,
+    amount_cents                INTEGER NOT NULL,
+    recovered_cents             INTEGER NOT NULL DEFAULT 0,
     method                      TEXT NOT NULL,
     error_reason                TEXT NOT NULL,
     error_source                TEXT NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS records (
     pre_debit_notified          INTEGER NOT NULL,
     subscription_status         TEXT NOT NULL,
     customer_tenure_days        INTEGER NOT NULL,
-    customer_avg_payment_paise  INTEGER NOT NULL,
+    customer_avg_payment_cents  INTEGER NOT NULL,
     customer_salary_day         INTEGER NOT NULL,
     customer_prior_failures     INTEGER NOT NULL,
     customer_is_subscriber      INTEGER NOT NULL,
@@ -74,11 +74,11 @@ CREATE TABLE IF NOT EXISTS audit_log (
     guardrail_checks        TEXT NOT NULL,
     model_score             REAL,
     outcome                 TEXT NOT NULL,
-    amount_recovered_paise  INTEGER NOT NULL,
+    amount_recovered_cents  INTEGER NOT NULL,
     idempotency_key         TEXT NOT NULL,
     execution_mode          TEXT NOT NULL,
     api_called              INTEGER NOT NULL,
-    razorpay_entity_id      TEXT,
+    paypal_entity_id      TEXT,
     was_mocked              INTEGER NOT NULL DEFAULT 0,
     mock_reason             TEXT NOT NULL DEFAULT '',
     api_error               TEXT NOT NULL DEFAULT ''
@@ -126,24 +126,24 @@ class Store:
         self.conn.execute(
             """
             INSERT INTO records (
-                record_id, customer_id, amount_paise, method, error_reason,
+                record_id, customer_id, amount_cents, method, error_reason,
                 error_source, failed_at, prior_retries, is_mandate_debit,
                 pre_debit_notified, subscription_status, customer_tenure_days,
-                customer_avg_payment_paise, customer_salary_day,
+                customer_avg_payment_cents, customer_salary_day,
                 customer_prior_failures, customer_is_subscriber, detected_class,
                 status, attempts, updated_at
             ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             ON CONFLICT(record_id) DO UPDATE SET
-                amount_paise = excluded.amount_paise,
+                amount_cents = excluded.amount_cents,
                 detected_class = excluded.detected_class
             """,
             (
-                record.record_id, record.customer_id, record.amount_paise,
+                record.record_id, record.customer_id, record.amount_cents,
                 record.method.value, record.error_reason, record.error_source,
                 record.failed_at.isoformat(), record.prior_retries,
                 int(record.is_mandate_debit), int(record.pre_debit_notified),
                 record.subscription_status, record.customer_tenure_days,
-                record.customer_avg_payment_paise, record.customer_salary_day,
+                record.customer_avg_payment_cents, record.customer_salary_day,
                 record.customer_prior_failures, int(record.customer_is_subscriber),
                 detected_class, RecordStatus.PENDING.value, 0, None,
             ),
@@ -190,21 +190,21 @@ class Store:
         ).fetchone()
         return int(row["attempts"])
 
-    def add_recovered(self, record_id: str, paise: int) -> int:
+    def add_recovered(self, record_id: str, cents: int) -> int:
         self.conn.execute(
-            "UPDATE records SET recovered_paise = recovered_paise + ? "
+            "UPDATE records SET recovered_cents = recovered_cents + ? "
             "WHERE record_id = ?",
-            (paise, record_id),
+            (cents, record_id),
         )
         self.conn.commit()
         row = self.conn.execute(
-            "SELECT recovered_paise FROM records WHERE record_id = ?", (record_id,)
+            "SELECT recovered_cents FROM records WHERE record_id = ?", (record_id,)
         ).fetchone()
-        return int(row["recovered_paise"])
+        return int(row["recovered_cents"])
 
-    def outstanding_paise(self, record_id: str) -> int:
+    def outstanding_cents(self, record_id: str) -> int:
         row = self.conn.execute(
-            "SELECT amount_paise - recovered_paise AS outstanding "
+            "SELECT amount_cents - recovered_cents AS outstanding "
             "FROM records WHERE record_id = ?",
             (record_id,),
         ).fetchone()
@@ -218,7 +218,7 @@ class Store:
         return list(
             self.conn.execute(
                 f"SELECT * FROM records WHERE status IN ({placeholders}) "
-                "ORDER BY amount_paise DESC",
+                "ORDER BY amount_cents DESC",
                 [s.value for s in _OPEN_STATUSES],
             )
         )
@@ -231,21 +231,21 @@ class Store:
             )
         }
 
-    def total_at_risk_paise(self) -> int:
+    def total_at_risk_cents(self) -> int:
         row = self.conn.execute(
-            "SELECT COALESCE(SUM(amount_paise), 0) AS total FROM records"
+            "SELECT COALESCE(SUM(amount_cents), 0) AS total FROM records"
         ).fetchone()
         return int(row["total"])
 
-    def total_recovered_paise(self, run_id: Optional[str] = None) -> int:
+    def total_recovered_cents(self, run_id: Optional[str] = None) -> int:
         if run_id is None:
             row = self.conn.execute(
-                "SELECT COALESCE(SUM(amount_recovered_paise), 0) AS total "
+                "SELECT COALESCE(SUM(amount_recovered_cents), 0) AS total "
                 "FROM audit_log"
             ).fetchone()
         else:
             row = self.conn.execute(
-                "SELECT COALESCE(SUM(amount_recovered_paise), 0) AS total "
+                "SELECT COALESCE(SUM(amount_recovered_cents), 0) AS total "
                 "FROM audit_log WHERE run_id = ?",
                 (run_id,),
             ).fetchone()
@@ -288,14 +288,14 @@ class Store:
             INSERT INTO audit_log (
                 run_id, record_id, customer_id, timestamp, attempt_number,
                 chosen_action, rationale, guardrail_checks, model_score,
-                outcome, amount_recovered_paise, idempotency_key,
-                execution_mode, api_called, razorpay_entity_id, was_mocked,
+                outcome, amount_recovered_cents, idempotency_key,
+                execution_mode, api_called, paypal_entity_id, was_mocked,
                 mock_reason, api_error
             ) VALUES (
                 :run_id, :record_id, :customer_id, :timestamp, :attempt_number,
                 :chosen_action, :rationale, :guardrail_checks, :model_score,
-                :outcome, :amount_recovered_paise, :idempotency_key,
-                :execution_mode, :api_called, :razorpay_entity_id, :was_mocked,
+                :outcome, :amount_recovered_cents, :idempotency_key,
+                :execution_mode, :api_called, :paypal_entity_id, :was_mocked,
                 :mock_reason, :api_error
             )
             """,
@@ -380,13 +380,13 @@ def load_customers(store: Store) -> Dict[str, Customer]:  # pragma: no cover - h
     customers: Dict[str, Customer] = {}
     for row in store.conn.execute(
         "SELECT DISTINCT customer_id, customer_tenure_days, "
-        "customer_avg_payment_paise, customer_salary_day, "
+        "customer_avg_payment_cents, customer_salary_day, "
         "customer_prior_failures, customer_is_subscriber FROM records"
     ):
         customers[row["customer_id"]] = Customer(
             customer_id=row["customer_id"],
             tenure_days=row["customer_tenure_days"],
-            avg_payment_paise=row["customer_avg_payment_paise"],
+            avg_payment_cents=row["customer_avg_payment_cents"],
             salary_day=row["customer_salary_day"],
             is_subscriber=bool(row["customer_is_subscriber"]),
             prior_failures=row["customer_prior_failures"],

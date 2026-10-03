@@ -29,7 +29,7 @@ from recoup.events import (
 )
 from recoup.executor import TEST_MODE_SUPPORT
 from recoup.models import Customer, FailedRecord, LatentTruth
-from recoup.money import split_paise
+from recoup.money import split_cents
 
 
 @dataclass
@@ -49,7 +49,7 @@ def execute_and_suspend(
     run_id: str,
     attempt_n: int,
     now: datetime,
-    outstanding_paise: Optional[int] = None,
+    outstanding_cents: Optional[int] = None,
 ) -> SuspendedAttempt:
     """Fire the action, write a FIRED event, and return.  No outcome yet.
 
@@ -57,9 +57,9 @@ def execute_and_suspend(
     ``occurred_at = now``), and what a later resolution folds against.
     """
     action = spec(intervention)
-    outstanding = record.amount_paise if outstanding_paise is None else outstanding_paise
+    outstanding = record.amount_cents if outstanding_cents is None else outstanding_cents
     amount = (
-        split_paise(outstanding, action.recovery_fraction)
+        split_cents(outstanding, action.recovery_fraction)
         if action.recovery_fraction < 1.0
         else outstanding
     )
@@ -74,7 +74,7 @@ def execute_and_suspend(
         stage=Stage.FIRED,
         intervention=intervention.value,
         is_contact=action.contacts_customer,
-        amount_paise=amount,
+        amount_cents=amount,
         occurred_at=now.isoformat(),
         ingested_at=now.isoformat(),
         api_result=api,
@@ -128,13 +128,13 @@ class SimulatedGateway:
         run_id: str,
         attempt_n: int,
         now: datetime,
-        outstanding_paise: Optional[int] = None,
+        outstanding_cents: Optional[int] = None,
     ) -> SuspendedAttempt:
         """Fire and queue the settlement for ``now + settle_delay``."""
         attempt = execute_and_suspend(
             self.store, record, intervention,
             run_id=run_id, attempt_n=attempt_n, now=now,
-            outstanding_paise=outstanding_paise,
+            outstanding_cents=outstanding_cents,
         )
         self._seq += 1
         heapq.heappush(
@@ -187,9 +187,9 @@ class SimulatedGateway:
         # Re-derive the fired amount so the resolution matches the intent.
         outstanding_ok = self.store.events_for_record(item.record.record_id)
         fired_amount = next(
-            (e.amount_paise for e in outstanding_ok
+            (e.amount_cents for e in outstanding_ok
              if e.attempt_n == item.attempt.attempt_n and e.stage is Stage.FIRED),
-            item.record.amount_paise,
+            item.record.amount_cents,
         )
         if recovered:
             fin = (
@@ -210,12 +210,12 @@ class SimulatedGateway:
             stage=Stage.RESOLVED,
             intervention=item.intervention.value,
             is_contact=action.contacts_customer,
-            amount_paise=fired_amount,
+            amount_cents=fired_amount,
             occurred_at=item.settle_at.isoformat(),
             ingested_at=now.isoformat(),
             api_result=ApiResult.ACCEPTED,
             financial_result=fin,
-            amount_recovered_paise=amount_recovered,
+            amount_recovered_cents=amount_recovered,
             source="simulator",
             raw={"phase": "resolved"},
         )

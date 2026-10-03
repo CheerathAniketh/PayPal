@@ -1,6 +1,8 @@
 """PayPal Orders v2 calls. The idempotency key goes in PayPal-Request-Id."""
 from __future__ import annotations
 
+import json
+
 import requests
 
 from config.paypal_settings import PayPalSettings
@@ -53,5 +55,27 @@ class PayPalOrders:
                               headers=self._headers(), timeout=20)
         body = resp.json() if resp.content else {}
         if resp.status_code != 200:
+            raise PayPalApiError(resp.status_code, body)
+        return body
+
+    def capture_order(self, order_id: str, *, idempotency_key: str,
+                      mock_code: str | None = None) -> dict:
+        """Capture an approved order.
+
+        ``mock_code`` sets the sandbox-only PayPal-Mock-Response header so the
+        sandbox returns that PayPal error. PayPalSettings refuses live mode, so
+        this can never reach production.
+        """
+        headers = self._headers(idempotency_key)
+        if mock_code:
+            headers["PayPal-Mock-Response"] = json.dumps(
+                {"mock_application_codes": mock_code}
+            )
+        resp = self._http.post(
+            f"{self._s.base_url}/v2/checkout/orders/{order_id}/capture",
+            data=b"{}", headers=headers, timeout=20,
+        )
+        body = resp.json() if resp.content else {}
+        if resp.status_code not in (200, 201):
             raise PayPalApiError(resp.status_code, body)
         return body

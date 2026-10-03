@@ -48,10 +48,10 @@ def test_full_batch_run_terminates_and_is_coherent(batch_data):
         + summary.in_progress_count
         == summary.n_records
     )
-    assert summary.total_at_risk_paise > 0
+    assert summary.total_at_risk_cents > 0
     assert 0.0 <= summary.recovery_rate <= 1.0
     # It respected the budget ceiling.
-    assert summary.budget_spent_paise <= config.batch_budget_paise
+    assert summary.budget_spent_cents <= config.batch_budget_cents
 
 
 def test_recovered_money_never_exceeds_total_at_risk(batch_data):
@@ -61,7 +61,7 @@ def test_recovered_money_never_exceeds_total_at_risk(batch_data):
         [r.to_json() for r in records],
         SchedulerConfig(run_id="run_b", start=datetime(2026, 1, 16, 9)),
     ).run()
-    assert summary.recovered_paise <= summary.total_at_risk_paise
+    assert summary.recovered_cents <= summary.total_at_risk_cents
 
 
 def test_contact_cap_bites_across_a_single_customers_records(batch_data):
@@ -76,15 +76,15 @@ def test_contact_cap_bites_across_a_single_customers_records(batch_data):
     for i in range(4):
         r = make_record(
             record_id=f"caprec_{i}",
-            customer=make_customer(customer_id=cid, avg_payment_paise=300_000),
-            amount_paise=400_000,           # big enough that a contact is worth it
+            customer=make_customer(customer_id=cid, avg_payment_cents=300_000),
+            amount_cents=400_000,           # big enough that a contact is worth it
             reason="card_expired",
         )
         d = r.to_json()
         recs.append(d)
     # These customer_ids are not in the demo executor's map; but card_expired
     # contacts park without calling the executor's environment, so that's fine.
-    customers[cid] = make_customer(customer_id=cid, avg_payment_paise=300_000)
+    customers[cid] = make_customer(customer_id=cid, avg_payment_cents=300_000)
     latent[recs[0]["record_id"]] = None  # not used for parked contacts
 
     config = SchedulerConfig(run_id="run_cap", start=datetime(2026, 1, 16, 9))
@@ -119,7 +119,7 @@ def test_async_resolution_lifts_the_recovery_number(batch_data):
     after = scheduler._summarise()
 
     assert after.in_progress_count < before.in_progress_count
-    assert after.recovered_paise >= before.recovered_paise
+    assert after.recovered_cents >= before.recovered_cents
 
 
 def test_ingest_outcome_is_idempotent(batch_data):
@@ -137,11 +137,11 @@ def test_ingest_outcome_is_idempotent(batch_data):
         customer_id=rec["customer_id"],
         kind="customer_action",
         acted=True,
-        amount_recovered_paise=10_000,
+        amount_recovered_cents=10_000,
         occurred_at_iso=datetime(2026, 1, 20, 9).isoformat(),
     )
     first = scheduler.ingest_outcome(event)
     second = scheduler.ingest_outcome(event)  # duplicate
     assert first is not None
     assert second is None
-    assert scheduler.states[rec["record_id"]].recovered_paise <= int(rec["amount_paise"])
+    assert scheduler.states[rec["record_id"]].recovered_cents <= int(rec["amount_cents"])

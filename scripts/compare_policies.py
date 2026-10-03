@@ -64,7 +64,7 @@ def _true_value(env, batch, record, intervention, now):
     latent = batch.latent[record.record_id]
     when = attempt_time(intervention, record.customer_salary_day, now)
     p = env.true_prob(record, customer, latent, intervention, when)
-    return int(p * record.amount_paise * spec(intervention).recovery_fraction)
+    return int(p * record.amount_cents * spec(intervention).recovery_fraction)
 
 
 def _scorable(record):
@@ -128,7 +128,7 @@ def main() -> None:
         c = batch.customers[r.customer_id]
         l = batch.latent[r.record_id]
         oi, op = env.best_intervention(r, c, l, now)
-        v_oracle += int(op * r.amount_paise * spec(oi).recovery_fraction)
+        v_oracle += int(op * r.amount_cents * spec(oi).recovery_fraction)
 
     print("Five-policy comparison -- single-attempt recoverable value, whole batch")
     print("=" * 70)

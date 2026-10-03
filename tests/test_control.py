@@ -18,17 +18,17 @@ from recoup.agent.control import (
     classify,
     decide,
 )
-from recoup.money import rupees_to_paise
+from recoup.money import rupees_to_cents
 
 
 def _record(**overrides):
     base = {
         "record_id": "rec_1",
         "customer_id": "cust_1",
-        "amount_paise": rupees_to_paise(2000),
+        "amount_cents": rupees_to_cents(2000),
         "error_reason": "insufficient_funds",
         "prior_retries": 0,
-        "customer_avg_payment_paise": rupees_to_paise(1500),
+        "customer_avg_payment_cents": rupees_to_cents(1500),
         "is_mandate_debit": False,
         "pre_debit_notified": True,
         "subscription_status": "active",
@@ -51,13 +51,13 @@ def test_classify_is_a_lookup_not_a_guess():
 # decide
 # --------------------------------------------------------------------------
 def test_decide_picks_argmax_net_ev():
-    decision = decide(_record(amount_paise=rupees_to_paise(5000)))
+    decision = decide(_record(amount_cents=rupees_to_cents(5000)))
     assert decision.chosen is not Intervention.GIVE_UP
     assert decision.stop is False
     # The chosen row is the top of the ranked list by net EV.
-    evs = [r["net_ev_paise"] for r in decision.ranked]
+    evs = [r["net_ev_cents"] for r in decision.ranked]
     assert evs == sorted(evs, reverse=True)
-    assert decision.net_ev_paise == evs[0]
+    assert decision.net_ev_cents == evs[0]
 
 
 def test_decide_abandons_when_only_a_costly_contact_is_left():
@@ -69,7 +69,7 @@ def test_decide_abandons_when_only_a_costly_contact_is_left():
     """
     decision = decide(_record(
         error_reason="card_expired",  # only candidate: update_payment_method
-        amount_paise=rupees_to_paise(150),
+        amount_cents=rupees_to_cents(150),
     ))
     assert decision.chosen is Intervention.GIVE_UP
     assert decision.stop is True
@@ -106,7 +106,7 @@ def test_cooldown_blocks_a_too_soon_retry():
 
 def test_amount_gate_blocks_a_large_autonomous_retry():
     result = check_guardrails(
-        _record(amount_paise=rupees_to_paise(9000)), Intervention.RETRY_NOW,
+        _record(amount_cents=rupees_to_cents(9000)), Intervention.RETRY_NOW,
         attempt=1, hours_since_last=None, prior_contacts=0,
     )
     assert result.blocked
@@ -156,7 +156,7 @@ def test_a_clean_retry_passes_every_guardrail():
 def test_economics_and_compliance_are_separate_predicates():
     """A record can be economically worth it AND compliance-blocked -- the two
     verdicts are independent, for different logged causes."""
-    record = _record(amount_paise=rupees_to_paise(9000))  # big -> worth it
+    record = _record(amount_cents=rupees_to_cents(9000))  # big -> worth it
     decision = decide(record)
     assert decision.stop is False  # economically worth trying
     guard = check_guardrails(

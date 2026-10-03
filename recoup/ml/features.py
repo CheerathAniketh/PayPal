@@ -76,8 +76,8 @@ def _one_hot(value: str, vocabulary: Sequence[str], prefix: str) -> Dict[str, fl
 
 
 def _amount_ratio(record: Dict[str, Any]) -> float:
-    avg = max(int(record.get("customer_avg_payment_paise", 1)), 1)
-    return int(record.get("amount_paise", 0)) / avg
+    avg = max(int(record.get("customer_avg_payment_cents", 1)), 1)
+    return int(record.get("amount_cents", 0)) / avg
 
 
 def feature_names() -> List[str]:
@@ -101,12 +101,12 @@ def feature_dict(record: Dict[str, Any], intervention: Intervention) -> Dict[str
     ) is not None else FailureClass.UNKNOWN
 
     feats: Dict[str, float] = {
-        "log_amount": math.log1p(float(record.get("amount_paise", 0))),
+        "log_amount": math.log1p(float(record.get("amount_cents", 0))),
         "amount_ratio": _amount_ratio(record),
         "prior_retries": float(record.get("prior_retries", 0)),
         "customer_tenure_days": float(record.get("customer_tenure_days", 0)),
         "log_customer_avg_payment": math.log1p(
-            float(record.get("customer_avg_payment_paise", 0))
+            float(record.get("customer_avg_payment_cents", 0))
         ),
         "customer_salary_day": float(record.get("customer_salary_day", 0)),
         "customer_prior_failures": float(record.get("customer_prior_failures", 0)),

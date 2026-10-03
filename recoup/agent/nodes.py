@@ -17,7 +17,7 @@ from config.taxonomy import Intervention, spec
 from recoup.agent.control import check_guardrails, classify, decide
 from recoup.agent.runtime import RUNTIME
 from recoup.agent.state import AgentState, TerminalStatus
-from recoup.money import split_paise
+from recoup.money import split_cents
 
 
 # --------------------------------------------------------------------------
@@ -59,7 +59,7 @@ def decide_node(state: AgentState) -> Dict[str, Any]:
         "decision": {
             "failure_class": decision.failure_class.value,
             "chosen": decision.chosen.value,
-            "net_ev_paise": decision.net_ev_paise,
+            "net_ev_cents": decision.net_ev_cents,
             "p_recover": round(decision.p_recover, 4),
             "ranked": decision.ranked,
             "stop": decision.stop,
@@ -120,14 +120,14 @@ def route_after_guardrail(state: AgentState) -> str:
 def execute(state: AgentState) -> Dict[str, Any]:
     record = state["record"]
     intervention = Intervention(state["decision"]["chosen"])
-    outstanding = int(record.get("_outstanding_paise", record.get("amount_paise", 0)))
+    outstanding = int(record.get("_outstanding_cents", record.get("amount_cents", 0)))
 
     if RUNTIME.executor is None:
         # No executor wired (pure control test): synthesise a no-op result.
         return {
             "execution": {
                 "outcome": "failed",
-                "amount_recovered_paise": 0,
+                "amount_recovered_cents": 0,
                 "api_called": False,
                 "settles_async": spec(intervention).contacts_customer,
             },
@@ -144,14 +144,14 @@ def execute(state: AgentState) -> Dict[str, Any]:
         run_id=state["run_id"],
         attempt_number=int(state["attempt"]),
         attempt_at_iso=state["now_iso"],
-        outstanding_paise=outstanding,
+        outstanding_cents=outstanding,
     )
 
     # Cap recovery at the outstanding balance -- never over-collect. (This is the
     # §14 over-collection fix: a partial debit followed by a full retry must not
     # recover more than is owed.)
-    recovered = min(int(result.get("amount_recovered_paise", 0)), outstanding)
-    result["amount_recovered_paise"] = recovered
+    recovered = min(int(result.get("amount_recovered_cents", 0)), outstanding)
+    result["amount_recovered_cents"] = recovered
 
     if result.get("settles_async"):
         terminal = TerminalStatus.IN_PROGRESS.value
@@ -192,11 +192,11 @@ def log(state: AgentState) -> Dict[str, Any]:
         "guardrail_checks": guardrail.get("checks", {}),
         "model_score": decision.get("p_recover"),
         "outcome": state.get("terminal_status"),
-        "amount_recovered_paise": int(execution.get("amount_recovered_paise", 0)),
+        "amount_recovered_cents": int(execution.get("amount_recovered_cents", 0)),
         "idempotency_key": execution.get("idempotency_key", ""),
         "execution_mode": "simulated",
         "api_called": bool(execution.get("api_called", False)),
-        "razorpay_entity_id": execution.get("razorpay_entity_id"),
+        "paypal_entity_id": execution.get("paypal_entity_id"),
         "was_mocked": bool(execution.get("was_mocked", False)),
         "mock_reason": execution.get("mock_reason", ""),
         "narration": state.get("narration", ""),

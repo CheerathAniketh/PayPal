@@ -169,7 +169,7 @@ def _holdout_value(batch, chooser):
         l = batch.latent[rec.record_id]
         when = attempt_time(interv, rec.customer_salary_day, now)
         p = env.true_prob(rec, c, l, interv, when)
-        total += int(p * rec.amount_paise * spec(interv).recovery_fraction)
+        total += int(p * rec.amount_cents * spec(interv).recovery_fraction)
     return total
 
 

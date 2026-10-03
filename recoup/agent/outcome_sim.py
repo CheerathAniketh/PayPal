@@ -30,7 +30,7 @@ class _Parked:
     attempt_n: int
     parked_at: datetime
     deadline: datetime
-    outstanding_paise: int
+    outstanding_cents: int
 
 
 class OutcomeSimulator:
@@ -55,7 +55,7 @@ class OutcomeSimulator:
         intervention: Intervention,
         attempt_n: int,
         now: datetime,
-        outstanding_paise: int,
+        outstanding_cents: int,
     ) -> None:
         self._parked.append(
             _Parked(
@@ -66,7 +66,7 @@ class OutcomeSimulator:
                 attempt_n=attempt_n,
                 parked_at=now,
                 deadline=now + self.response_window,
-                outstanding_paise=outstanding_paise,
+                outstanding_cents=outstanding_cents,
             )
         )
 
@@ -110,6 +110,6 @@ class OutcomeSimulator:
             customer_id=parked.record.customer_id,
             kind="customer_action",
             acted=acted,
-            amount_recovered_paise=parked.outstanding_paise if acted else 0,
+            amount_recovered_cents=parked.outstanding_cents if acted else 0,
             occurred_at_iso=parked.deadline.isoformat(),
         )

@@ -20,7 +20,7 @@ gross EV.
 
 Anchoring the cost without inventing a number
 ---------------------------------------------
-Rather than hand-picking paise, a policy anchor ``P_STAR_TARGET`` (the minimum
+Rather than hand-picking cents, a policy anchor ``P_STAR_TARGET`` (the minimum
 success probability worth acting on at a reference amount) is chosen, and the
 base contact cost is back-solved from it.  The story stays honest: the number
 comes from a stated policy, not from a coefficient pulled out of the air.
@@ -35,7 +35,7 @@ from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
 from config.taxonomy import CANDIDATES, FailureClass, Intervention, spec
-from recoup.money import rupees_to_paise
+from recoup.money import rupees_to_cents
 
 
 @dataclass(frozen=True)
@@ -45,12 +45,12 @@ class EconomicPolicy:
     # Gateway fee: a hard channel cost, charged only on a successful capture.
     # Razorpay's standard MDR is ~2%; a per-txn floor keeps tiny debits honest.
     gateway_fee_bps: int = 200                # 2.00%
-    gateway_fee_floor_paise: int = 200        # Rs 2 minimum
+    gateway_fee_floor_cents: int = 200        # Rs 2 minimum
 
     # The policy anchor. "At a reference charge of Rs 1,000, do not bother
     # contacting a customer unless the success probability is at least this."
     p_star_target: float = 0.20
-    reference_amount_paise: int = field(default_factory=lambda: rupees_to_paise(1000))
+    reference_amount_cents: int = field(default_factory=lambda: rupees_to_cents(1000))
 
     # Linear cost escalation (option 2 of the three considered). One clean knob
     # `k`: the nth customer-facing contact costs base * (1 + k*n). Makes the
@@ -59,18 +59,18 @@ class EconomicPolicy:
 
     # A silent retry does not touch the customer, so its contact cost is ~zero
     # and it never escalates. Only customer-facing asks climb the ladder.
-    silent_retry_cost_paise: int = 0
+    silent_retry_cost_cents: int = 0
 
     # Abandon when the best net EV is at or below this. Zero by default: an
     # attempt that does not beat break-even is not worth making.
-    tau_paise: int = 0
+    tau_cents: int = 0
 
-    def gateway_fee(self, amount_paise: int) -> int:
-        """The fee charged on a successful capture of ``amount_paise``."""
-        pct = (amount_paise * self.gateway_fee_bps) // 10_000
-        return max(pct, self.gateway_fee_floor_paise)
+    def gateway_fee(self, amount_cents: int) -> int:
+        """The fee charged on a successful capture of ``amount_cents``."""
+        pct = (amount_cents * self.gateway_fee_bps) // 10_000
+        return max(pct, self.gateway_fee_floor_cents)
 
-    def base_contact_cost_paise(self) -> int:
+    def base_contact_cost_cents(self) -> int:
         """Back-solve the base contact cost from the policy anchor.
 
             base = p_star_target * (reference_amount - fee(reference_amount))
@@ -78,7 +78,7 @@ class EconomicPolicy:
         This is the cost such that, at the reference amount, break-even lands
         exactly on ``p_star_target``.
         """
-        net = self.reference_amount_paise - self.gateway_fee(self.reference_amount_paise)
+        net = self.reference_amount_cents - self.gateway_fee(self.reference_amount_cents)
         return int(round(self.p_star_target * net))
 
 
@@ -92,7 +92,7 @@ class EconomicStopReason(str, Enum):
     NOTHING_TO_TRY = "nothing_to_try"              # only terminal options left
 
 
-def contact_cost_paise(
+def contact_cost_cents(
     prior_contacts: int, is_contact: bool, policy: EconomicPolicy = DEFAULT_POLICY
 ) -> int:
     """Cost of the *next* action.
@@ -102,35 +102,35 @@ def contact_cost_paise(
     escalate.
     """
     if not is_contact:
-        return policy.silent_retry_cost_paise
-    base = policy.base_contact_cost_paise()
+        return policy.silent_retry_cost_cents
+    base = policy.base_contact_cost_cents()
     return int(round(base * (1.0 + policy.escalation_k * prior_contacts)))
 
 
-def net_ev_paise(
+def net_ev_cents(
     p_recover: float,
-    amount_paise: int,
+    amount_cents: int,
     *,
     recovery_fraction: float = 1.0,
     prior_contacts: int = 0,
     is_contact: bool = False,
     policy: EconomicPolicy = DEFAULT_POLICY,
 ) -> int:
-    """net_ev = p * (collected - fee) - contact_cost, in integer paise.
+    """net_ev = p * (collected - fee) - contact_cost, in integer cents.
 
     ``recovery_fraction`` handles partial debits: a smaller-amount retry
     collects less on success, so its whole p-weighted term shrinks -- which is
     exactly why ranking on probability alone would over-prefer it.
     """
-    collected = int(amount_paise * recovery_fraction)
+    collected = int(amount_cents * recovery_fraction)
     fee = policy.gateway_fee(collected)
     gross = p_recover * (collected - fee)
-    cost = contact_cost_paise(prior_contacts, is_contact, policy)
+    cost = contact_cost_cents(prior_contacts, is_contact, policy)
     return int(round(gross - cost))
 
 
 def break_even_probability(
-    amount_paise: int,
+    amount_cents: int,
     *,
     prior_contacts: int = 0,
     is_contact: bool = True,
@@ -142,10 +142,10 @@ def break_even_probability(
     Returns a value that may exceed 1.0 -- meaning no probability justifies the
     action at this amount (a tiny charge against a real contact cost).
     """
-    collected = int(amount_paise * recovery_fraction)
+    collected = int(amount_cents * recovery_fraction)
     fee = policy.gateway_fee(collected)
     denom = collected - fee
-    cost = contact_cost_paise(prior_contacts, is_contact, policy)
+    cost = contact_cost_cents(prior_contacts, is_contact, policy)
     if denom <= 0:
         return float("inf")
     return cost / denom
@@ -155,13 +155,13 @@ def break_even_probability(
 class RankedCandidate:
     intervention: Intervention
     p_recover: float
-    net_ev_paise: int
+    net_ev_cents: int
     is_contact: bool
 
 
 def rank_interventions(
     failure_class: FailureClass,
-    amount_paise: int,
+    amount_cents: int,
     p_by_intervention: Dict[Intervention, float],
     *,
     prior_contacts: int = 0,
@@ -179,9 +179,9 @@ def rank_interventions(
         if action.terminal:
             continue
         p = p_by_intervention.get(intervention, 0.0)
-        ev = net_ev_paise(
+        ev = net_ev_cents(
             p,
-            amount_paise,
+            amount_cents,
             recovery_fraction=action.recovery_fraction,
             prior_contacts=prior_contacts,
             is_contact=action.contacts_customer,
@@ -190,7 +190,7 @@ def rank_interventions(
         ranked.append(
             RankedCandidate(intervention, p, ev, action.contacts_customer)
         )
-    ranked.sort(key=lambda c: c.net_ev_paise, reverse=True)
+    ranked.sort(key=lambda c: c.net_ev_cents, reverse=True)
     return ranked
 
 
@@ -208,6 +208,6 @@ def should_stop_economic(
     if not ranked:
         return True, EconomicStopReason.NOTHING_TO_TRY, None
     best = ranked[0]
-    if best.net_ev_paise <= policy.tau_paise:
+    if best.net_ev_cents <= policy.tau_cents:
         return True, EconomicStopReason.NO_POSITIVE_CANDIDATE, best
     return False, EconomicStopReason.WORTH_IT, best

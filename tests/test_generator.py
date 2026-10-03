@@ -126,7 +126,7 @@ def test_latent_traits_are_partially_but_not_fully_inferable(batch):
         [
             np.ones_like(tenure),
             tenure,
-            np.array([c.avg_payment_paise for c in batch.customers.values()], float),
+            np.array([c.avg_payment_cents for c in batch.customers.values()], float),
             np.array([c.prior_failures for c in batch.customers.values()], float),
             np.array(
                 [float(c.is_subscriber) for c in batch.customers.values()]
@@ -176,7 +176,7 @@ def test_optimal_intervention_varies_by_customer_trait(env):
     winners = {}
     for label, regularity in (("regular", 1.0), ("irregular", 0.16)):
         customer = make_customer(salary_day=salary_day, income_regularity=regularity)
-        record = make_record(customer=customer, amount_paise=70_000, failed_at=now)
+        record = make_record(customer=customer, amount_cents=70_000, failed_at=now)
         latent = make_latent(income_regularity=regularity)
         salary_window = SimulatedClock(now).next_high_liquidity_day(salary_day, 24.0)
 
@@ -287,7 +287,7 @@ def _entry(**overrides) -> AuditEntry:
         guardrail_checks={"cooldown": "pass"},
         model_score=0.42,
         outcome=Outcome.RECOVERED,
-        amount_recovered_paise=73_600,
+        amount_recovered_cents=73_600,
         idempotency_key="recoup:run_1:rec_0001:attempt:1",
         execution_mode=ExecutionMode.SIMULATED,
         api_called=False,

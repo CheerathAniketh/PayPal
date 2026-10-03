@@ -31,7 +31,7 @@ def wired():
 def _run(records, klass, *, now=datetime(2026, 1, 27, 9), attempt=1, overrides=None):
     record = next(r for r in records if classify_reason(r.error_reason) is klass)
     rec = record.to_json()
-    rec["_outstanding_paise"] = rec["amount_paise"]
+    rec["_outstanding_cents"] = rec["amount_cents"]
     if overrides:
         rec.update(overrides)
     return graph.invoke(
@@ -87,7 +87,7 @@ def test_class_five_tries_once_then_escalates(wired):
         if classify_reason(r.error_reason) is FailureClass.DO_NOT_HONOUR
         and latent[r.record_id].is_truly_dead
     )
-    rec = dead.to_json(); rec["_outstanding_paise"] = rec["amount_paise"]
+    rec = dead.to_json(); rec["_outstanding_cents"] = rec["amount_cents"]
     # Attempt 2 exceeds the class-5 cap of 1 -> guardrail escalates.
     out = graph.invoke(
         {"run_id": "run_test", "record": rec, "attempt": 2,
@@ -117,7 +117,7 @@ def test_amount_over_cap_escalates(wired):
     records, _latent, _audit = wired
     out = _run(
         records, FailureClass.INSUFFICIENT_FUNDS,
-        overrides={"amount_paise": 900_000, "_outstanding_paise": 900_000},
+        overrides={"amount_cents": 900_000, "_outstanding_cents": 900_000},
     )
     assert out["terminal_status"] == "escalated"
     assert out["guardrail"]["checks"]["amount_gate"] == "fail"
@@ -129,7 +129,7 @@ def test_recovery_never_exceeds_outstanding(wired):
     records, _latent, _audit = wired
     out = _run(
         records, FailureClass.BANK_DOWNTIME,
-        overrides={"_outstanding_paise": 10_000},  # tiny residual
+        overrides={"_outstanding_cents": 10_000},  # tiny residual
     )
-    recovered = int(out["execution"].get("amount_recovered_paise", 0))
+    recovered = int(out["execution"].get("amount_recovered_cents", 0))
     assert recovered <= 10_000

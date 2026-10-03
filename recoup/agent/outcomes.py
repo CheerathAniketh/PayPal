@@ -32,13 +32,13 @@ class NormalisedEvent:
     customer_id: str
     kind: str                  # "customer_action" | "timeout" | ...
     acted: bool
-    amount_recovered_paise: int
+    amount_recovered_cents: int
     occurred_at_iso: str
 
 
 def resolve_outcome(event: NormalisedEvent) -> ResolvedOutcome:
     """Pure map from an event to a resolution.  No I/O, easy to test."""
-    if event.kind == "customer_action" and event.acted and event.amount_recovered_paise > 0:
+    if event.kind == "customer_action" and event.acted and event.amount_recovered_cents > 0:
         return ResolvedOutcome.RECOVERED
     if event.kind in ("timeout", "customer_action") and not event.acted:
         return ResolvedOutcome.LAPSED
@@ -50,7 +50,7 @@ class OutcomeResolution:
     record_id: str
     resolution: ResolvedOutcome
     terminal_status: str
-    amount_recovered_paise: int
+    amount_recovered_cents: int
 
 
 class OutcomeIngest:
@@ -73,7 +73,7 @@ class OutcomeIngest:
         resolution = resolve_outcome(event)
         if resolution is ResolvedOutcome.RECOVERED:
             terminal = TerminalStatus.RECOVERED.value
-            amount = event.amount_recovered_paise
+            amount = event.amount_recovered_cents
         elif resolution is ResolvedOutcome.LAPSED:
             terminal = TerminalStatus.ESCALATED.value
             amount = 0

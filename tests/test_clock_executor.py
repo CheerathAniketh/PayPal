@@ -126,7 +126,7 @@ def test_mocked_interventions_are_flagged_not_hidden():
     when called under TEST_MODE) it is flagged mocked, with the reason attached.
     """
     ex = _executor()
-    record = make_record(reason="mandate_creation_declined")
+    record = make_record(reason="payer_action_required")
     result = ex.execute(
         record, make_customer(), make_latent(),
         Intervention.RE_AUTH_MANDATE, run_id="run_1", attempt_number=1,
@@ -143,7 +143,7 @@ def test_partial_debit_recovers_only_part_of_the_amount():
     partial as a full recovery would inflate the headline. Rs 736 -> Rs 368.
     """
     ex = _executor()
-    record = make_record(amount_paise=73_600)
+    record = make_record(amount_cents=73_600)
     # A latent set up to make the smaller-amount retry succeed.
     latent = make_latent(base_logodds=6.0)
     result = ex.execute(
@@ -152,8 +152,8 @@ def test_partial_debit_recovers_only_part_of_the_amount():
         attempt_at=NOW,
     )
     assert result.outcome is Outcome.RECOVERED
-    assert result.amount_attempted_paise == 36_800
-    assert result.amount_recovered_paise == 36_800
+    assert result.amount_attempted_cents == 36_800
+    assert result.amount_recovered_cents == 36_800
 
 
 def test_terminal_interventions_recover_nothing_and_touch_no_api():
@@ -169,7 +169,7 @@ def test_terminal_interventions_recover_nothing_and_touch_no_api():
             run_id="run_1", attempt_number=1, attempt_at=NOW,
         )
         assert result.outcome is outcome
-        assert result.amount_recovered_paise == 0
+        assert result.amount_recovered_cents == 0
         assert result.api_called is False
         assert spec(intervention).terminal
 
