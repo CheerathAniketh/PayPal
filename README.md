@@ -6,7 +6,7 @@ When a payment fails, most merchants either retry blindly or give up. Recoup tre
 
 Built for the [PayPal AI Hackathon](https://paypal-ai-hackathon.devpost.com/) (Devpost).
 
-- Hosted demo: `TODO: Render URL`
+- Hosted demo: https://recoup-mrkf.onrender.com (free tier, so the first request after idle can be slow while the service wakes)
 - Demo video: `TODO: YouTube URL`
 - License: MIT
 
@@ -132,7 +132,7 @@ On Render's free tier the service spins down after 15 minutes idle, and the orde
 
 Please read these before judging the project.
 
-- **Live round trip: `TODO: not yet verified. Update after the Render test.`** The webhook handler, signature verification and capture flow are implemented and unit-tested, but the end-to-end sandbox round trip has not been run yet at the time of writing. Where the order id sits in webhook payloads is assumed (`resource.id` for `CHECKOUT.ORDER.APPROVED`, `resource.supplementary_data.related_ids.order_id` for capture events); `recoup/api/normalise.py` is the one place to correct it.
+- **Live round trip: verified once on 3 Oct 2026 against the deployed Render service.** A real sandbox order was created through `POST /api/demo/order`, approved by a sandbox buyer, and PayPal's signature-verified webhooks arrived in order: `CHECKOUT.ORDER.APPROVED` (received twice, one second apart, under different event ids; the capture request carries an idempotency key, so the second one should not double-capture, though I did not test that separately), then `PAYMENT.CAPTURE.COMPLETED`, which the server matched to the registered order and recorded as `recovered`. The order id locations assumed for both event types turned out to be correct. Limits: it was run once, not as a repeated test; the order registry and event log are in memory (a restart on Render's free tier clears them); and a webhook recovery shows up in the live-events panel but is not yet applied to the batch ledger.
 - **Fees**: the Checkout fee is modelled as 3.49% plus a fixed $0.49. The percentage is from PayPal's own page; the $0.49 comes from secondary sources and is unverified. Cross-border surcharges are not modelled.
 - **Learned model**: the committed LightGBM propensity model was trained before the PayPal port, on a different set of payment rails, and has not been retrained. The headline numbers use the rules policy.
 - **Coarse reason codes**: PayPal's error codes are coarse, so timing decisions (for example waiting for a payday window) come from customer signals and the model, not from the reason code.
