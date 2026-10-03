@@ -103,14 +103,16 @@ RECOUP_NARRATOR=gemini python -m scripts.build_ledger
 | Variable | Needed for |
 |---|---|
 | `PAYPAL_ENV=sandbox` | PayPal calls. The client refuses any other value. |
-| `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET` | PayPal sandbox calls (a Merchant sandbox app) |
+| `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET` | PayPal sandbox calls. Use a REST app on a **US-region Business** sandbox account: in our testing an India-region sandbox merchant failed USD checkout with `UNSUPPORTED_PAYEE_CURRENCY`, and a US-region one worked. |
 | `PAYPAL_WEBHOOK_ID` | Verifying webhook signatures. Without it `/webhook` returns 503 so PayPal retries. |
 | `DEMO_TOKEN` | Enabling `POST /api/demo/order`. Without it that endpoint returns 404. |
 | `GEMINI_API_KEY` | Regenerating the ledger with Gemini narration only |
 
 ### Live webhook demo
 
-1. `POST /api/demo/order` with header `X-Demo-Token: <DEMO_TOKEN>`. This creates a real sandbox order and returns an `approve_url`.
+First register a webhook on your sandbox app, pointing at `<your-url>/webhook`, for `CHECKOUT.ORDER.APPROVED`, `PAYMENT.CAPTURE.COMPLETED` and `PAYMENT.CAPTURE.DENIED`, and set its ID as `PAYPAL_WEBHOOK_ID`.
+
+1. `POST /api/demo/order` with header `X-Demo-Token: <DEMO_TOKEN>` and a JSON body such as `{"record_id": "rec_0000", "customer_id": "cust_0039"}`. This creates a real sandbox order and returns an `approve_url`.
 2. Open `approve_url` and approve as a sandbox buyer.
 3. Watch `GET /api/webhook-events` or the live panel on the dashboard.
 
@@ -132,7 +134,7 @@ On Render's free tier the service spins down after 15 minutes idle, and the orde
 
 Please read these before judging the project.
 
-- **Live round trip: verified once on 3 Oct 2026 against the deployed Render service.** A real sandbox order was created through `POST /api/demo/order`, approved by a sandbox buyer, and PayPal's signature-verified webhooks arrived in order: `CHECKOUT.ORDER.APPROVED` (received twice, one second apart, under different event ids; the capture request carries an idempotency key, so the second one should not double-capture, though I did not test that separately), then `PAYMENT.CAPTURE.COMPLETED`, which the server matched to the registered order and recorded as `recovered`. The order id locations assumed for both event types turned out to be correct. Limits: it was run once, not as a repeated test; the order registry and event log are in memory (a restart on Render's free tier clears them); and a webhook recovery shows up in the live-events panel but is not yet applied to the batch ledger.
+- **Live round trip: verified once on 3 Oct 2026 against the deployed Render service.** A real sandbox order was created through `POST /api/demo/order`, approved by a sandbox buyer, and PayPal's signature-verified webhooks arrived in order: `CHECKOUT.ORDER.APPROVED` (received twice, one second apart, under different event ids; the capture request carries an idempotency key, so the second one should not double-capture, though we did not test that separately), then `PAYMENT.CAPTURE.COMPLETED`, which the server matched to the registered order and recorded as `recovered`. The order id locations assumed for both event types turned out to be correct. Limits: it was run once, not as a repeated test; the order registry and event log are in memory (a restart on Render's free tier clears them); and a webhook recovery shows up in the live-events panel but is not yet applied to the batch ledger.
 - **Fees**: the Checkout fee is modelled as 3.49% plus a fixed $0.49. The percentage is from PayPal's own page; the $0.49 comes from secondary sources and is unverified. Cross-border surcharges are not modelled.
 - **Learned model**: the committed LightGBM propensity model was trained before the PayPal port, on a different set of payment rails, and has not been retrained. The headline numbers use the rules policy.
 - **Coarse reason codes**: PayPal's error codes are coarse, so timing decisions (for example waiting for a payday window) come from customer signals and the model, not from the reason code.
