@@ -7,13 +7,11 @@ pytest>=8.0,<10.0
 # ---- Phase 2/3: the agent graph + payments API -----------------------------
 langgraph>=1.2,<2.0
 langgraph-cli>=0.4,<1.0
-razorpay>=1.4,<2.0
 python-dotenv>=1.0,<2.0
 
-# ---- Phase 3 integration (FastAPI webhook seam, Claude narrator) -----------
-# fastapi>=0.115,<1.0
-# uvicorn>=0.30,<1.0
-# anthropic>=0.40
+# ---- Phase 3 integration (FastAPI webhook seam, LLM narrator) -----------
+fastapi>=0.115,<1.0
+uvicorn>=0.30,<1.0
 
 # ---- Phase 4: propensity model ---------------------------------------------
 # Verified installable together (lightgbm 4.7, sklearn 1.x). joblib ships with
