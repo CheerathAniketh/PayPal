@@ -8,8 +8,8 @@ possible.
 
 Wiring real infrastructure is a one-call swap:
 
-    configure(executor=PayPalExecutor(), clock=SimClock(),
-              audit=SqliteAudit(), narrator=ClaudeNarrator(), policy=Policy(...))
+    configure(executor=Executor(...), clock=SimClock(),
+              audit=SqliteAudit(), narrator=TemplateNarrator(), policy=Policy(...))
 """
 
 from __future__ import annotations
