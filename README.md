@@ -7,7 +7,6 @@ When a payment fails, most merchants either retry blindly or give up. Recoup tre
 Built for the [PayPal AI Hackathon](https://paypal-ai-hackathon.devpost.com/) (Devpost).
 
 - Hosted demo: https://recoup-mrkf.onrender.com (free tier, so the first request after idle can be slow while the service wakes)
-- Demo video: `TODO: YouTube URL`
 - License: MIT
 
 ## What existed before, and what is new

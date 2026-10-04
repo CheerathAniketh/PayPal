@@ -5,16 +5,23 @@ interventions the agent may choose from.
 
 Why classification is a lookup and not a model
 ----------------------------------------------
-Razorpay hands you the reason code in its error response; its own documentation
-says the ``reason`` field can be handled programmatically.  Putting a classifier
+PayPal hands you the reason in its error response (``details[].issue`` on the
+Orders API), which can be handled programmatically.  Putting a classifier
 on top of a lookup table is ML-as-decoration.  The ML in this project is
 reserved for the genuinely uncertain question -- *will this recover?* -- not the
 solved one -- *what broke?*
 
-Reason strings below were verified against Razorpay's published error tables
-(List of Errors: Bad Request + Gateway Errors, plus the Cards and UPI method
-pages).  Notably ``do_not_honour`` and ``gateway_error`` are NOT Razorpay
-strings -- they are ISO-8583 / colloquial terminology.
+What was verified, and how: through the PayPal sandbox's negative-testing
+header (``PayPal-Mock-Response``, see ``scripts/probe_mock_errors.py``) the
+capture endpoint accepted INSTRUMENT_DECLINED, TRANSACTION_REFUSED,
+PAYER_ACTION_REQUIRED, ORDER_NOT_APPROVED, PAYER_ACCOUNT_RESTRICTED and
+TRANSACTION_LIMIT_EXCEEDED and returned them as ``details[0].issue``.
+INTERNAL_SERVER_ERROR returns HTTP 500 with no ``issue``.  The mock bodies are
+canned, so this confirms the vocabulary, not live decline behaviour.
+
+Two reasons used in the synthetic data, insufficient_funds and card_expired,
+were rejected by the sandbox mock mechanism.  They come from the generator
+only and are not confirmed PayPal behaviour.
 """
 
 from __future__ import annotations
@@ -97,7 +104,7 @@ SOURCE_VOCABULARY: Mapping[PaymentMethod, Tuple[str, ...]] = {
 
 
 def classify_reason(reason: str) -> FailureClass:
-    """Map a Razorpay reason code to a failure class.
+    """Map a PayPal reason code to a failure class.
 
     Returns :data:`FailureClass.UNKNOWN` for anything unmapped rather than
     guessing at the nearest class.  Escalation is the default for anything

@@ -257,7 +257,7 @@ def test_classify_unknown_escalates():
     """Unmapped signals do not get guessed at.
 
     ``do_not_honour`` and ``gateway_error`` are the specific trap: both sound
-    like Razorpay reason codes, neither is one.
+    like PayPal reason codes, neither is one.
     """
     assert classify_reason("do_not_honour") is FailureClass.UNKNOWN
     assert classify_reason("gateway_error") is FailureClass.UNKNOWN

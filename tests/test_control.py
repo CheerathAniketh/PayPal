@@ -43,7 +43,7 @@ def _record(**overrides):
 def test_classify_is_a_lookup_not_a_guess():
     assert classify(_record(error_reason="insufficient_funds")) is FailureClass.INSUFFICIENT_FUNDS
     assert classify(_record(error_reason="card_expired")) is FailureClass.CARD_EXPIRED
-    # A non-Razorpay string is UNKNOWN, never coerced to a plausible class.
+    # A non-PayPal string is UNKNOWN, never coerced to a plausible class.
     assert classify(_record(error_reason="do_not_honour")) is FailureClass.UNKNOWN
 
 
@@ -123,7 +123,7 @@ def test_cancelled_mandate_cannot_be_silently_retried():
     assert result.checks["mandate_active"] == "fail"
 
 
-def test_emandate_without_pre_debit_notice_is_blocked():
+def test_stored_method_charge_without_notice_is_blocked():
     result = check_guardrails(
         _record(is_mandate_debit=True, pre_debit_notified=False,
                 subscription_status="active"),

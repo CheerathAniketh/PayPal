@@ -102,7 +102,7 @@ class SimulatedGateway:
     """Queues settlement and resolves it later through ``ingest_outcome``.
 
     Stands in for the real webhook infrastructure behind the same seam.  A real
-    Razorpay webhook route is a new *caller* of ``ingest_outcome``, not a
+    PayPal webhook route is a new *caller* of ``ingest_outcome``, not a
     rewrite of this.
     """
 

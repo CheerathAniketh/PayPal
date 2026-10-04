@@ -102,7 +102,7 @@ def test_key_differs_per_attempt_and_per_run():
     )
 
 
-def test_receipt_fits_razorpay_limit():
+def test_receipt_fits_reference_limit():
     """Uniqueness survives the 40-character squeeze."""
     seen = set()
     for run in ("run_1", "run_2"):

@@ -1,7 +1,7 @@
 """The async resolution seam: ``ingest_outcome`` and a pure ``resolve_outcome``.
 
 Human outcomes (a customer updates a card, re-auths a mandate) take real-world
-time and arrive later.  Both a real Razorpay webhook route and the test-mode
+time and arrive later.  Both a real PayPal webhook route and the test-mode
 ``OutcomeSimulator`` call ``ingest_outcome`` with a normalised event.  It is
 idempotent by ``event_id`` -- webhooks arrive at-least-once and out of order --
 and the classification of an event into a resolution is the pure function

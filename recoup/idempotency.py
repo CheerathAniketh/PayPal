@@ -9,7 +9,7 @@ failures its *defining hazard*, not an edge case:
     twice.
 
 That is strictly worse than any metric being slightly off, and it is the single
-worst outcome this system can produce.  Razorpay's own guidance is explicit:
+worst outcome this system can produce.  The standard guidance for payment APIs is explicit:
 retries after a timeout must reuse the same idempotency key *and* the same
 request body.
 
@@ -24,7 +24,8 @@ import hashlib
 from enum import Enum
 from typing import Mapping, Set
 
-# Razorpay's `receipt` field is capped at 40 characters.
+# A conservative self-imposed cap on reference ids.  We have not verified
+# PayPal's actual limits for PayPal-Request-Id or reference_id.
 PAYPAL_REFERENCE_LIMIT = 40
 
 
@@ -61,7 +62,7 @@ def staged_key(run_id: str, record_id: str, attempt_number: int, stage: str) -> 
 
 
 def receipt_id(run_id: str, record_id: str, attempt_number: int) -> str:
-    """Compress the key to fit Razorpay's 40-character ``receipt`` limit while
+    """Compress the key to fit a 40-character reference limit while
     preserving the (run, record, attempt) triple."""
     full = attempt_key(run_id, record_id, attempt_number)
     digest = hashlib.sha256(full.encode("utf-8")).hexdigest()[:16]

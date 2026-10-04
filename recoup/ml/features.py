@@ -16,7 +16,7 @@ Design choices
   any record.  This is the property a stateful ``OneHotEncoder`` would have to
   promise and could silently break.
 * **Derived ``failure_class`` instead of the raw reason string.**  The class is a
-  deterministic function of the observable reason code (Razorpay hands it to us),
+  deterministic function of the observable reason code (PayPal hands it to us),
   and within a class the specific reason carries no additional recovery signal in
   this environment.  Feeding the class keeps the vector low-cardinality and
   honest; the raw ``error_reason`` / ``error_source`` strings are deliberately

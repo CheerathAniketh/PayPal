@@ -33,7 +33,7 @@ class IngestReport:
 
 
 def detect(record: FailedRecord) -> FailureClass:
-    """The whole of detection: a lookup on the reason Razorpay handed us."""
+    """The whole of detection: a lookup on the reason PayPal handed us."""
     return classify_reason(record.error_reason)
 
 

@@ -1,7 +1,7 @@
 """Protocol seams: the graph depends on behaviour, not implementations.
 
 Each port is a ``Protocol`` so a demo adapter (offline, deterministic) and a
-real adapter (Razorpay, SQLite, Claude) are interchangeable without the nodes
+real adapter (PayPal, SQLite, an LLM) are interchangeable without the nodes
 knowing which they hold.  This is what lets the whole agent run offline in CI
 and against the real test-mode account with the same code.
 """

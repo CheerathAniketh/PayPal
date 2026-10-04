@@ -63,7 +63,7 @@ DEFAULT_POLICY = Policy()
 # Diagnose
 # --------------------------------------------------------------------------
 def classify(record: Dict[str, Any]) -> FailureClass:
-    """Pure lookup on the reason Razorpay handed us.  Never ML."""
+    """Pure lookup on the reason PayPal handed us.  Never ML."""
     return classify_reason(record.get("error_reason", ""))
 
 

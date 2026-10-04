@@ -8,7 +8,7 @@ possible.
 
 Wiring real infrastructure is a one-call swap:
 
-    configure(executor=RealRazorpayExecutor(), clock=SimClock(),
+    configure(executor=PayPalExecutor(), clock=SimClock(),
               audit=SqliteAudit(), narrator=ClaudeNarrator(), policy=Policy(...))
 """
 

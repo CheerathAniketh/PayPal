@@ -7,8 +7,9 @@ figure to drift from the sum of its parts.  A reviewer who totals the audit log
 by hand and gets a different number stops trusting every other number.
 
 The tell was already in the code before this module existed:
-``int(round(record.amount * 100))`` at the API boundary.  Razorpay's API works
-in cents, so integers *remove* a conversion rather than adding one.
+``int(round(record.amount * 100))`` at the API boundary.  PayPal's Orders API takes
+decimal strings such as "10.00", so integer cents are converted once,
+explicitly, at the API boundary.
 """
 
 from __future__ import annotations
