@@ -74,7 +74,7 @@ These are simulated outcomes from one seeded batch, not claims about real mercha
 Tested on Python 3.14, Linux.
 
 ```bash
-git clone https://github.com/CheerathAniketh/PayPal.git && cd PayPal
+git clone https://github.com/CheerathAniketh/Recoup.git && cd Recoup
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env          # then fill in the values you need, see below
